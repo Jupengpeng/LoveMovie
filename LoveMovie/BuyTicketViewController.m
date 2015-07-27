@@ -8,16 +8,27 @@
 
 #import "BuyTicketViewController.h"
 #import "JPControl.h"
-#define kMovBtnTag 101
 @interface BuyTicketViewController ()
-
+{
+    AFHTTPRequestOperationManager * _manager;
+}
 @end
 
 @implementation BuyTicketViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor lightGrayColor];
+    _manager = [AFHTTPRequestOperationManager manager];
+    _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
     if (self.movieViewController==nil) {
         self.movieViewController = [[BuyMovieViewController alloc]init];
     }
@@ -25,28 +36,79 @@
         self.cinemaViewController = [[BuyCinemaViewController alloc]init];
     }
     
+    self.automaticallyAdjustsScrollViewInsets= NO;
     
-    UILabel * locationLabel =[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 40, 20)];
-    locationLabel.text =@"郑州";
-    UIBarButtonItem * locationBtn = [[UIBarButtonItem alloc]initWithTitle:@"郑州" style:UIBarButtonItemStyleBordered target:self action:@selector(locationClick:)];
-    self.navigationItem.leftBarButtonItem = locationBtn;
+    //左上角位置button
     
-    [self initUI];
+    NSString * locationName = @"位置";
+    self.locationBtn = [[UIBarButtonItem alloc]initWithTitle:locationName style:UIBarButtonItemStyleBordered target:self action:@selector(locationClick:)];
+    [self.locationBtn setTintColor:[UIColor whiteColor]];
+    self.navigationItem.leftBarButtonItem = self.locationBtn;
+//获取当前地址
+    [self getCurrentLocation];
 
+    
+    
+}
+
+- (void)getCurrentLocation{
+    
+    __weak typeof(self) weakSelf = self;
+    [[CCLocationManager shareLocation] getLocationCoordinate:^(CLLocationCoordinate2D coordinate) {
+        NSString * locationUrl = [NSString stringWithFormat:kLocationUrl,coordinate.latitude,coordinate.longitude];
+        weakSelf.cinemaViewController.myCoordinate = coordinate;
+        weakSelf.movieViewController.myCoordinate = coordinate;
+        [_manager GET:locationUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if (responseObject) {
+                NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+                weakSelf.locationModel = [[LocationModel alloc]init];
+                [weakSelf.locationModel setValuesForKeysWithDictionary:dict];
+                weakSelf.locationBtn.title =weakSelf.locationModel.name;
+                weakSelf.currentCityId =weakSelf.locationModel.cityId;
+                weakSelf.cinemaViewController.currentCityId = weakSelf.locationModel.cityId;
+                weakSelf.movieViewController.currentCityId =weakSelf.locationModel.cityId;
+                
+                
+                [self initUI];
+
+            }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            BBLog(@"位置数据下载失败");
+        }];
+        
+    }];
     
 }
 
-- (void)locationClick:(UIBarButtonItem *)barButtonItem{
-    [self beginLocation];
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(nslog) userInfo:nil repeats:NO];
-
-
-}
-- (void)nslog{
-    NSLog(@"longitude:%f",self.coordinate.longitude);
-    NSLog(@"latitude:%f",self.coordinate.latitude);
+- (void)locationClick:(UIBarButtonItem *)barButtonItem
+{
+    LocationViewController * lvc = [[LocationViewController alloc]init];
+    __weak typeof(self) weakSelf=  self;
     
+    [lvc setMyBlock:^(LocationModel *locationModel) {
+
+        if (locationModel.name) {
+            
+            weakSelf.locationBtn.title = locationModel.name;
+            //城市id的传递 持续向下传递
+            weakSelf.currentCityId = locationModel.cityId;
+            
+            weakSelf.cinemaViewController.currentCityId = locationModel.cityId;
+            weakSelf.movieViewController.currentCityId = locationModel.cityId;
+            [self initUI];
+        }else{
+            weakSelf.locationBtn.title = weakSelf.locationBtn.title;
+            weakSelf.currentCityId = weakSelf.currentCityId;
+            
+        }
+    }];
+    [self.navigationController pushViewController:lvc animated:YES];
+
+
+
 }
+
+
 
 - (void)initUI{
     
@@ -94,6 +156,8 @@
     
     
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

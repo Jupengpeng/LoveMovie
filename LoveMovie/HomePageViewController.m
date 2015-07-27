@@ -38,6 +38,7 @@
 @property (nonatomic,strong) UITableView * tableView;
 @property (nonatomic,strong) HomePageModel * homePageModel;
 @property (nonatomic,strong) HomeHeaderModel * headerModel;
+@property (nonatomic,strong)CLLocationManager * locationManager;
 
 
 
@@ -47,7 +48,8 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
+    self.automaticallyAdjustsScrollViewInsets = YES;
+
     
 }
 
@@ -55,11 +57,77 @@
     [super viewDidLoad];
     _manager = [AFHTTPRequestOperationManager manager];
     _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [self initData];
 
+
+    
+    //左上角位置button
+    
+    NSString * locationName = @"位置";
+    self.locationBtn = [[UIBarButtonItem alloc]initWithTitle:locationName style:UIBarButtonItemStyleBordered target:self action:@selector(locationClick:)];
+    [self.locationBtn setTintColor:[UIColor whiteColor]];
+    self.navigationItem.leftBarButtonItem = self.locationBtn;
     [self initUI];
+
+    //获取当前地址
+    [self getCurrentLocation];
+    
+    
+
     
 }
+- (void)getCurrentLocation{
+    
+    __weak typeof(self) weakSelf = self;
+    
+
+    
+    [[CCLocationManager shareLocation] getLocationCoordinate:^(CLLocationCoordinate2D coordinate) {
+        NSString * locationUrl = [NSString stringWithFormat:kLocationUrl,coordinate.latitude,coordinate.longitude];
+        [_manager GET:locationUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if (responseObject) {
+                NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+                weakSelf.locationModel = [[LocationModel alloc]init];
+                [weakSelf.locationModel setValuesForKeysWithDictionary:dict];
+                weakSelf.locationBtn.title =weakSelf.locationModel.name;
+                weakSelf.currentCityId =weakSelf.locationModel.cityId;
+                
+                
+                [weakSelf initData];
+            }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            BBLog(@"%@",[error description]);
+        }];
+        
+    }];
+    
+}
+
+- (void)locationClick:(UIBarButtonItem *)barButtonItem
+{
+    LocationViewController * lvc = [[LocationViewController alloc]init];
+    __weak typeof(self) weakSelf=  self;
+    
+    [lvc setMyBlock:^(LocationModel *locationModel) {
+        if (locationModel.name) {
+
+        weakSelf.locationBtn.title = locationModel.name;
+        //城市id的传递 持续向下传递
+        weakSelf.currentCityId = locationModel.cityId;
+            [self initData];
+            [self initUI];
+        }else{
+            weakSelf.locationBtn.title = weakSelf.locationBtn.title;
+            weakSelf.currentCityId = weakSelf.currentCityId;
+
+        }
+        
+    }];
+    [weakSelf.navigationController pushViewController:lvc animated:YES];
+    
+    
+    
+}
+
 - (void)initUI{
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenSize.width, kScreenSize.height)];
     self.tableView.delegate = self;
@@ -77,7 +145,7 @@
     
 }
 - (void)initData{
-    NSString * headerUrl = [NSString stringWithFormat:kHomeHeaderUrl,kZZLid];
+    NSString * headerUrl = [NSString stringWithFormat:kHomeHeaderUrl,self.currentCityId];
     
     __weak typeof(self) weakSelf = self;
     [_manager GET:headerUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -99,9 +167,9 @@
         if (responseObject) {
             NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             weakSelf.homePageModel = [[HomePageModel alloc]initWithDictionary:dict error:nil];
-            [weakSelf.tableView reloadData];
         }
-        
+        [weakSelf.tableView reloadData];
+
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         BBLog(@"下载失败%@",[error description]);
     }];
@@ -112,7 +180,29 @@
     
 }
 
-
+- (void)initLocation{
+    __weak typeof(self) weakSelf = self;
+    [[CCLocationManager shareLocation] getLocationCoordinate:^(CLLocationCoordinate2D coordinate) {
+        
+        
+        NSString * locationUrl = [NSString stringWithFormat:kLocationUrl,coordinate.latitude,coordinate.longitude];
+        [_manager GET:locationUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if (responseObject) {
+                NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+                weakSelf.locationModel = [[LocationModel alloc]init];
+                [weakSelf.locationModel setValuesForKeysWithDictionary:dict];
+                NSLog(@"走进base位置%@",weakSelf.locationModel.name);
+                
+            }
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            BBLog(@"位置数据下载失败");
+        }];
+        
+    }];
+    
+    
+}
 
 #pragma mark - <UITableViewDataSource,UITableViewDelegate>
 

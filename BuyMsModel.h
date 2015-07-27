@@ -28,7 +28,7 @@
 @property (nonatomic,copy) NSString * commonSpecial;
 @property (nonatomic,copy) NSString * movieType;
 @property (nonatomic,strong) NSArray * p;
-
+@property (nonatomic) int locationId ;
 
 
 

@@ -27,10 +27,24 @@
     self.specialLabel.textColor = [UIColor orangeColor];
     self.upTimeLabel.text = [self transformTimeWithStr:msModel.rd];
     self.countLanel.text  = [NSString stringWithFormat:@"今日%d家影院 %d场",msModel.NearestCinemaCount,msModel.NearestShowtimeCount];
+    self.buyButton.tag = msModel.id;
 }
 
 //购买按钮
 - (IBAction)buyBtnClick:(UIButton *)sender {
+    
+    if (_myBolck) {
+        _myBolck(sender.tag);
+    }
+    
+    
+}
+
+- (void)setMyBlock:(HotMovieBlock)myBlock{
+    if (_myBolck != myBlock) {
+        _myBolck = [myBlock copy];
+    }
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -46,8 +60,6 @@
     d = [timeStr substringWithRange:NSMakeRange(6, 2)];
     
     return [NSString stringWithFormat:@"%@月%@日上映",m,d];
-    
-    
     
 }
 @end

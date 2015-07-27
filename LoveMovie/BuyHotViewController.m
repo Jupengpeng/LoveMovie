@@ -19,6 +19,11 @@
 
 @implementation BuyHotViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -28,17 +33,14 @@
         _dataArr = [[NSMutableArray alloc]init];
     }
     _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-//    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
-//    label.backgroundColor = [UIColor purpleColor];
-//    NSLog(@"11");
-//    [self.view addSubview:label];
+
     [self initData];
     [self initUI];
     
 }
 
 - (void)initData{
-    NSString * url  = [NSString stringWithFormat:kBuyHotMovie,kZZLid];
+    NSString * url  = [NSString stringWithFormat:kBuyHotMovie,self.currentCityId];
     __weak typeof(self) weakSelf = self;
     [_manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (responseObject) {
@@ -48,6 +50,7 @@
             for (NSDictionary * msDict in hotModel.ms) {
                 BuyMsModel * msModel = [[BuyMsModel alloc]init];
                 [msModel setValuesForKeysWithDictionary:msDict];
+                msModel.locationId = self.currentCityId;
                 [_dataArr addObject:msModel];
             }
             
@@ -84,12 +87,28 @@
     BuyHotCell * cell = [tableView dequeueReusableCellWithIdentifier:@"BuyHotCell" forIndexPath:indexPath];
     
     BuyMsModel * msModel  = _dataArr[indexPath.row];
+    //cell调用正在热映的push
+    [cell setMyBlock:^(int movieId) {
+        BuyMovieDetailController * bVC = [[BuyMovieDetailController alloc]init];
+        bVC.movieId = movieId;
+        bVC.movieName = msModel.tCn;
+        bVC.myCoordinate = self.myCoordinate;
+        bVC.locationId = self.currentCityId;
+        [self.navigationController pushViewController:bVC animated:YES];
+    }];
     
     [cell showDataWithMsModel:msModel];
     
     
     return cell;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

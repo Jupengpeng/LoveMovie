@@ -10,14 +10,22 @@
 
 @interface BuyCinemaModel : BaseModel
 
-@property (nonatomic,strong) NSArray * cinemas;
-@property (nonatomic,strong) NSArray * businessCinemas;
 
-@property (nonatomic,strong) NSArray * districts;
 
-@property (nonatomic,strong) NSArray * subways;
 
-@property (nonatomic,strong) NSArray * subwayCinemas;
+
+
+
+
+
+//@property (nonatomic,strong) NSArray * cinemas;
+//@property (nonatomic,strong) NSArray * businessCinemas;
+//
+//@property (nonatomic,strong) NSArray * districts;
+//
+//@property (nonatomic,strong) NSArray * subways;
+//
+//@property (nonatomic,strong) NSArray * subwayCinemas;
 
 
 

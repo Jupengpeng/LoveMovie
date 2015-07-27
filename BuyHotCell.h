@@ -9,7 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "BuyMsModel.h"
 #import "UIImageView+WebCache.h"
+typedef void (^HotMovieBlock) (int movieId);
+
 @interface BuyHotCell : UITableViewCell
+{
+    HotMovieBlock _myBolck;
+    
+}
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -23,5 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buyButton;
 
 - (void)showDataWithMsModel:(BuyMsModel *)msModel;
+
+- (void)setMyBlock:(HotMovieBlock)myBlock;
 
 @end

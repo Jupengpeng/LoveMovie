@@ -168,7 +168,7 @@
 {
     _currentIndex = scrollView.contentOffset.x / SCREEN_WIDTH;
     _navTabBar.currentItemIndex = _currentIndex;
-    _mainView.frame = CGRectMake(0, 35, _mainView.frame.size.width, kScreenSize.height-35);
+    _mainView.frame = CGRectMake(0, CGRectGetMaxY(_navTabBar.frame), _mainView.frame.size.width, kScreenSize.height-35);
 }
 
 

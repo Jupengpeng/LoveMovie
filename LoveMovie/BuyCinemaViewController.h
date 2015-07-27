@@ -11,6 +11,8 @@
 #import "JPControl.h"
 #import "BuyCinemaModel.h"
 #import "CinemaModel.h"
+#import "BuyCinemaCell.h"
+#import "CinemaDetailController.h"
 @interface BuyCinemaViewController : BaseViewController
 
 @property (nonatomic,strong) UITableView * tableView;
@@ -21,12 +23,19 @@
 
 @property (nonatomic,strong) NSMutableArray * cinemasArr;
 
-@property (nonatomic,strong) NSMutableArray * businessAreasArr;
+@property (nonatomic,strong) NSMutableArray * distanceArr;
 
 @property (nonatomic,strong) NSMutableArray * districtsArr;
 
-@property (nonatomic,strong) NSMutableArray * subwaysArr;
+@property (nonatomic,strong) NSMutableArray * emptyPriArr;
 
 @property (nonatomic,strong) NSMutableArray * subwayCinemasArr;
+
+@property (nonatomic)int currentCityId ;
+
+
+
+
+@property (nonatomic) CLLocationCoordinate2D myCoordinate;
 
 @end

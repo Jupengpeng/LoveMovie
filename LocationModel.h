@@ -10,4 +10,12 @@
 
 @interface LocationModel : BaseModel
 
+@property (nonatomic)int cityId ;
+@property (nonatomic,copy) NSString * name;
+@property (nonatomic,copy) NSString * pinyinShort;
+
+
+
+
+
 @end

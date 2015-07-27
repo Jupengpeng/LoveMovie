@@ -23,6 +23,10 @@
 
 @implementation BuyComingViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _manager = [AFHTTPRequestOperationManager manager];
@@ -34,17 +38,16 @@
         _topDataArr = [[NSMutableArray alloc]init];
     }
     self.view.backgroundColor = [UIColor whiteColor];
-    
-//    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
-//    label.backgroundColor = [UIColor cyanColor];
-//    [self.view addSubview:label];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+
+
     [self initData];
     [self initUI];
     
 }
 
 - (void)initData{
-    NSString * url = [NSString stringWithFormat:kBuyComingMovie,kZZLid];
+    NSString * url = [NSString stringWithFormat:kBuyComingMovie,self.currentCityId];
     [_manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (responseObject) {
             NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];

@@ -15,4 +15,5 @@
 
 + (UIButton *)createButtonWithFrame:(CGRect)frame borderColor:(UIColor *)borderColor borderWidth:(CGFloat)width titleColor:(UIColor *)titleColor adjustWidth:(BOOL)isAdjust textAligment:(NSTextAlignment )NSTextAlignment target:(id)target action:(SEL)action ;
 
++ (NSString *)transformToHourWithMinutes:(int)minutes;
 @end

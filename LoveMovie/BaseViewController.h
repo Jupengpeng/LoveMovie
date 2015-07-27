@@ -8,12 +8,23 @@
 
 #import <UIKit/UIKit.h>
 #import "JPControl.h"
-#import <CoreLocation/CoreLocation.h>
-
+#import "CCLocationManager.h"
+#import "LocationModel.h"
+#import "MyControl.h"
 @interface BaseViewController : UIViewController
 
-@property (nonatomic)    CLLocationCoordinate2D coordinate ;
+@property (nonatomic,strong) LocationModel * locationModel;
 
-- (void)beginLocation;
-- (void)endLocation;
+//增加 titleView
+- (void)addTitleViewWithTitle:(NSString *)title;
+
+//计算距离
+- (double)getDistanceFrom:(CLLocationCoordinate2D)origCoordonate toDistWithLatitude:(CLLocationDegrees)latitude Longitude:(CLLocationDegrees)longitude;
+
+- (void)exchangeArray:(NSMutableArray *)array WithIndex1:(NSInteger)index1 index2:(NSInteger)index2;
+
+- (NSString *)firstTransformTimeWithStr:(NSString *)timeStr;
+
+- (NSString *)secondTransformTimeWithStr:(NSString *)timeStr;
+
 @end

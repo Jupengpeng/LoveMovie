@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>79C62D63-C9B5-4ED4-B9DE-D82FBDA0E823</string>
+	<key>IDESourceControlProjectName</key>
+	<string>LoveMovie</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>092BD85DEAA2A376FB1D40702F1E6274FCD36BF8</key>
+		<string>https://github.com/Jupengpeng/LoveMovie.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>LoveMovie.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>092BD85DEAA2A376FB1D40702F1E6274FCD36BF8</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/Jupengpeng/LoveMovie.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>092BD85DEAA2A376FB1D40702F1E6274FCD36BF8</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>092BD85DEAA2A376FB1D40702F1E6274FCD36BF8</string>
+			<key>IDESourceControlWCCName</key>
+			<string>LoveMovie</string>
+		</dict>
+	</array>
+</dict>
+</plist>

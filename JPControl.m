@@ -34,7 +34,21 @@
     return button;
 }
 
-
++ (NSString *)transformToHourWithMinutes:(int)minutes{
+    int h = 0;
+    int m = 0;
+    NSString * time = nil;
+    h = minutes/60;
+    m = minutes%60;
+    if (h<0) {
+        h=-h;
+    }
+    if (h>24) {
+        h=h%24;
+    }
+    time = [NSString stringWithFormat:@"%02d:%02d",h,m];
+    return time;
+}
 
     
     

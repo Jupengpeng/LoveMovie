@@ -7,21 +7,23 @@
 //
 
 #import "BaseViewController.h"
-#import <CoreLocation/CoreLocation.h>
-@interface BaseViewController ()<CLLocationManagerDelegate>
-{
-    CLLocationManager * _manager;
-    
-}
+@interface BaseViewController ()
 
-@property (nonatomic,strong) CLLocationManager * manager;
+
 @end
 
 @implementation BaseViewController
 
+- (void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-//设置导航栏标题颜色
+    self.view.backgroundColor = [UIColor whiteColor];
+
+    //设置导航栏标题颜色
     [self.navigationController.navigationBar setTitleTextAttributes:
      
      @{NSFontAttributeName:[UIFont fontWithName:@"Arial Rounded MT Bold" size:18],
@@ -33,58 +35,60 @@
     self.navigationController.navigationBar.barTintColor = myRed;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     
-    [self initLocationManager];
 
-    
-    
-    
 }
 
 
 
-- (void)initLocationManager{
-    if (!self.manager) {
-        self.manager = [[CLLocationManager alloc]init];
-        self.manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-        self.manager.distanceFilter = 1;
-        
-        CGFloat version = [[[UIDevice currentDevice] systemVersion]floatValue];
-        if (version>=8.0) {
-            //申请用户授权位置信息
-            [self.manager requestAlwaysAuthorization];
-        }
-        self.manager.delegate = self;
-        
+//计算距离
+- (double)getDistanceFrom:(CLLocationCoordinate2D)origCoordonate toDistWithLatitude:(CLLocationDegrees)latitude Longitude:(CLLocationDegrees)longitude{
+    
+    CLLocation * orig = [[CLLocation alloc] initWithLatitude:origCoordonate.latitude  longitude:origCoordonate.longitude];
+    CLLocation * dist = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+    
+    CLLocationDistance kilometers=[orig distanceFromLocation:dist]/1000;
+    
+    return kilometers;
+}
+
+- (void)exchangeArray:(NSMutableArray *)array WithIndex1:(NSInteger)index1 index2:(NSInteger)index2{
+    NSObject * object  = [array objectAtIndex:index1];
+    [array replaceObjectAtIndex:index1 withObject:[array objectAtIndex:index2]];
+    [array replaceObjectAtIndex:index2 withObject:object];
+    
+    
+}
+
+//增加 titleView
+- (void)addTitleViewWithTitle:(NSString *)title {
+    UILabel *titleLabel = [MyControl creatLabelWithFrame:CGRectMake(0, 0, 200, 30) text:title];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:19];
+    
+    //设置titleView
+    self.navigationItem.titleView = titleLabel;
+    
+}
+
+//2015-07-26 --> 20150726
+- (NSString *)firstTransformTimeWithStr:(NSString *)timeStr{
+    NSString * neededTime  = @"";
+    NSArray * strArr = [timeStr componentsSeparatedByString:@"-"];
+    for (NSString * str in strArr) {
+        neededTime = [neededTime stringByAppendingString:str];
     }
-    
-    
+    return neededTime;
 }
 
-- (void)beginLocation{
-    //是否支持定位服务
-    if ([CLLocationManager locationServicesEnabled]) {
-        [self.manager startUpdatingLocation];
-    }else{
-        BBLog(@"没有gps");
-    }
-    
+- (NSString *)secondTransformTimeWithStr:(NSString *)timeStr{
+    NSString * neededTime  = @"";
+    NSMutableArray * strArr =[NSMutableArray arrayWithArray:[timeStr componentsSeparatedByString:@"-"]];
+    [strArr removeObjectAtIndex:0];
+    neededTime = [NSString stringWithFormat:@"%@月%@日",strArr[0],strArr[1]];
+    return neededTime;
 }
-
-- (void)endLocation{
-    
-    [self.manager stopUpdatingLocation];
-    
-}
-#pragma mark -<CLLocationManagerDelegate>
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-    
-    CLLocation * location = [locations lastObject ];
-    self.coordinate = location.coordinate;
-
-    
-}
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

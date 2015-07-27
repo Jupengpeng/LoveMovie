@@ -7,7 +7,13 @@
 //
 
 #import "BaseViewController.h"
+#import "LocationViewController.h"
 
 @interface HomePageViewController : BaseViewController
+
+@property (nonatomic)int currentCityId ;
+
+@property (nonatomic,strong) UIBarButtonItem * locationBtn;
+
 
 @end

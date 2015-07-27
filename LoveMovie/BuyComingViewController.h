@@ -22,4 +22,8 @@
 
 @property (nonatomic,strong) BuyComingModel * comingModel;
 
+@property (nonatomic) int  currentCityId;
+
+
+
 @end

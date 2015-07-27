@@ -11,4 +11,9 @@
 #import "BuyComingViewController.h"
 @interface BuyMovieViewController : BaseViewController
 
+@property (nonatomic) int  currentCityId;
+
+@property (nonatomic) CLLocationCoordinate2D myCoordinate;
+
+
 @end

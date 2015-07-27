@@ -20,9 +20,11 @@
     
     BuyHotViewController * hotController = [[BuyHotViewController alloc]init];
     hotController.title = @"正在热映";
-    
+    hotController.currentCityId = self.currentCityId;
+    hotController.myCoordinate = self.myCoordinate;
     BuyComingViewController * comingController=  [[BuyComingViewController alloc]init];
     comingController.title = @"即将上映";
+    comingController.currentCityId = self.currentCityId;
     SCNavTabBarController * navTabBarController  = [[SCNavTabBarController alloc]init];
     navTabBarController.subViewControllers = @[hotController,comingController];
     [navTabBarController addParentController:self];

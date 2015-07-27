@@ -12,8 +12,16 @@
 #import "BuyHotMovieModel.h"
 #import "BuyMsModel.h"
 #import "BuyHotCell.h"
+#import "BuyMovieDetailController.h"
 @interface BuyHotViewController : BaseViewController
 
+@property (nonatomic) int  currentCityId;
+
+
+
 @property (nonatomic,strong) UITableView * hotTableView;
+
+@property (nonatomic) CLLocationCoordinate2D myCoordinate;
+
 
 @end
