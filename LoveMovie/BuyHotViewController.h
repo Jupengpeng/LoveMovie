@@ -13,6 +13,7 @@
 #import "BuyMsModel.h"
 #import "BuyHotCell.h"
 #import "BuyMovieDetailController.h"
+#import "MyMovieDetailController.h"
 @interface BuyHotViewController : BaseViewController
 
 @property (nonatomic) int  currentCityId;

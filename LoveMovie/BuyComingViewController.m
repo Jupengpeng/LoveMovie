@@ -119,7 +119,6 @@
     flowLayout.itemSize = CGSizeMake(kScreenSize.width, 150);
     flowLayout.sectionInset = UIEdgeInsetsMake(0, 0,0, 0);
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
     self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 30, kScreenSize.width, 150) collectionViewLayout:flowLayout];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;

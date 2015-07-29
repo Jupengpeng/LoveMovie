@@ -67,7 +67,7 @@
         [_arrowButton addGestureRecognizer:tapGestureRecognizer];
     }
 //  滚动条
-    _navgationTabBar = [[UIScrollView alloc] initWithFrame:CGRectMake(DOT_COORDINATE, DOT_COORDINATE, functionButtonX, NAV_TAB_BAR_HEIGHT)];
+    _navgationTabBar = [[UIScrollView alloc] initWithFrame:CGRectMake(DOT_COORDINATE, self.frame.size.height-NAV_TAB_BAR_HEIGHT, functionButtonX, NAV_TAB_BAR_HEIGHT)];
 #warning 加颜色了
     _navgationTabBar.backgroundColor = [UIColor clearColor];
     _navgationTabBar.showsHorizontalScrollIndicator = NO;
@@ -79,8 +79,8 @@
 - (void)showLineWithButtonWidth:(CGFloat)width
 {
     //底边条
-    _line = [[UIView alloc] initWithFrame:CGRectMake(0, NAV_TAB_BAR_HEIGHT - 3.0f, kMyButtonWidth, 3.0f)];
-    _line.backgroundColor = UIColorWithRGBA(20.0f, 80.0f, 200.0f, 0.7f);
+    _line = [[UIView alloc] initWithFrame:CGRectMake(0, NAV_TAB_BAR_HEIGHT - 3.0f, width, 2.0f)];
+    _line.backgroundColor = self.lineColor;
     [_navgationTabBar addSubview:_line];
 }
 
@@ -90,10 +90,15 @@
     for (NSInteger index = 0; index < [_itemTitles count]; index++)
     {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(kMyButtonWidth*index, DOT_COORDINATE, kMyButtonWidth, NAV_TAB_BAR_HEIGHT);
+        button.frame = CGRectMake((kScreenSize.width/_itemTitles.count)*index, DOT_COORDINATE, kScreenSize.width/_itemTitles.count, NAV_TAB_BAR_HEIGHT);
         [button setTitle:_itemTitles[index] forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont systemFontOfSize:16.0];
-        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:16];
+        //两种情况
+        if (_itemTitles.count==2) {
+            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        }else{
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }
         [button addTarget:self action:@selector(itemPressed:) forControlEvents:UIControlEventTouchUpInside];
         [_navgationTabBar addSubview:button];
         
@@ -101,7 +106,7 @@
 //        buttonX += [widths[index] floatValue];
     }
     
-    [self showLineWithButtonWidth:kMyButtonWidth];
+    [self showLineWithButtonWidth:kScreenSize.width/_itemTitles.count];
     return buttonX;
 }
 
@@ -234,7 +239,7 @@
     }
     
     [UIView animateWithDuration:0.2f animations:^{
-        _line.frame = CGRectMake(button.frame.origin.x, _line.frame.origin.y, kMyButtonWidth, _line.frame.size.height);
+        _line.frame = CGRectMake(button.frame.origin.x, _line.frame.origin.y, kScreenSize.width/_itemTitles.count, _line.frame.size.height);
 //        _line.frame = CGRectMake(button.frame.origin.x + 2.0f, _line.frame.origin.y, [_itemsWidth[currentItemIndex] floatValue] - 4.0f, _line.frame.size.height);
     }];
 }

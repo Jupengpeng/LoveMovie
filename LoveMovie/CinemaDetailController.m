@@ -95,14 +95,11 @@
                 SofCinemaModel * sModel = [[SofCinemaModel alloc]init];
                 [sModel setValuesForKeysWithDictionary:dict];
                 if (sModel.startTime!=sModel.endTime) {
-                    //自己感觉的算法，无奈得不到服务器具体算法
-                    sModel.spaceTime = (sModel.endTime - sModel.startTime - 30028)/60;
-                    BBLog(@"%d",sModel.spaceTime);
+
                     [sModel setValuesForKeysWithDictionary:dict];
 
                     [self.dataArr addObject:sModel];
                 }
-
             }
             
         }

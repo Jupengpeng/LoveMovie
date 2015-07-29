@@ -20,14 +20,15 @@
     self.backgroundColor = [UIColor whiteColor];
     if (self.myImageView==nil) {
 
-    self.myImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, -64, kScreenSize.width, kHomeImageViewHeight)];
-//        UIImageView * blurImageView =  [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenSize.width, 1.253*kScreenSize.width)];
-
-//        [self.myImageView addSubview:blurImageView];
+    self.myImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenSize.width, kHomeImageViewHeight)];
+        UIImageView * imageView=  [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenSize.width, kHomeImageViewHeight)];
+        imageView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.4];
+        [self.myImageView addSubview:imageView];
+        
         [self addSubview:self.myImageView];
     }
     if (self.myScrollView==nil) {
-        self.myScrollView = [[OTPageView alloc]initWithFrame:CGRectMake(0, 0, kScreenSize.width, kImageSize.height)];
+        self.myScrollView = [[OTPageView alloc]initWithFrame:CGRectMake(0, 64, kScreenSize.width, kImageSize.height)];
         
         self.myScrollView.pageScrollView.dataSource = self;
         self.myScrollView.pageScrollView.delegate = self;
@@ -79,6 +80,7 @@
         self.specialLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.buyButton.frame), kScreenSize.width, 30)];
         self.specialLabel.textAlignment = NSTextAlignmentCenter;
         self.specialLabel.textColor = [UIColor orangeColor];
+        self.titleLabel.shadowColor = [UIColor whiteColor];
         self.specialLabel.font = [UIFont systemFontOfSize:14.0];
         [self addSubview:self.specialLabel];
     }
@@ -127,7 +129,7 @@
         imageView.clipsToBounds = YES;
 
         [imageView sd_setImageWithURL:[NSURL URLWithString:movieModel.img] placeholderImage:[UIImage imageNamed:@"empty"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            //图片为空，且取第一个model时
+            //图片为空，且取第一个model时 刚进入界面的背景图片
             if (self.myImageView.image==nil&&i==0) {
                 [self showSubViewWithModel:movieModel];
                 
@@ -139,17 +141,17 @@
 
         
     }
-    if (self.myImageView==nil) {
-        //刚进入界面的背景图片
-        HomeHeaderMovieModel * movieModel1 = [[HomeHeaderMovieModel alloc]init];
-        [movieModel1 setValuesForKeysWithDictionary:self.headerModel.movies[0]];
-        [self showSubViewWithModel:movieModel1];
-        
-    }
+//    if (self.myImageView==nil) {
+//        //刚进入界面的背景图片
+//        HomeHeaderMovieModel * movieModel1 = [[HomeHeaderMovieModel alloc]init];
+//        [movieModel1 setValuesForKeysWithDictionary:self.headerModel.movies[0]];
+//        [self showSubViewWithModel:movieModel1];
+//        
+//    }
 
-    [self.button1 setTitle:[NSString stringWithFormat: @"%d\n%@",headerModel.totalHotMovie,@"正在热映>"] forState:UIControlStateNormal];
-    [self.button2 setTitle:[NSString stringWithFormat: @"%d\n%@",headerModel.totalComingMovie,@"即将上映>"] forState:UIControlStateNormal];
-    [self.button3 setTitle:[NSString stringWithFormat: @"%d\n%@",headerModel.totalCinemaCount,@"找影院>"] forState:UIControlStateNormal];
+    [self.button1 setTitle:[NSString stringWithFormat: @"%d\n%@",headerModel.totalHotMovie,@"正在热映"] forState:UIControlStateNormal];
+    [self.button2 setTitle:[NSString stringWithFormat: @"%d\n%@",headerModel.totalComingMovie,@"即将上映"] forState:UIControlStateNormal];
+    [self.button3 setTitle:[NSString stringWithFormat: @"%d\n%@",headerModel.totalCinemaCount,@"找影院"] forState:UIControlStateNormal];
 
 
     [self.myScrollView.pageScrollView reloadData];
@@ -243,12 +245,13 @@
     if (_imageView==nil) {
         _imageView = [[UIImageView alloc]init];
     }
-    [_imageView sd_setImageWithURL:[NSURL URLWithString:movieModel.img] placeholderImage:[UIImage imageNamed:@"empty"] options:SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        [weakSelf.myImageView setImageToBlur:image blurRadius:30 completionBlock:^(NSError *error) {
-            //将模糊后的图片缓存
-            [[SDImageCache sharedImageCache] storeImage:weakSelf.myImageView.image forKey:urlOfBlur];
-            BBLog(@"模糊化 ");
-        }];
+#warning 修改了
+    [weakSelf.myImageView sd_setImageWithURL:[NSURL URLWithString:movieModel.img] placeholderImage:[UIImage imageNamed:@"empty"] options:SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//        [weakSelf.myImageView setImageToBlur:image blurRadius:30 completionBlock:^(NSError *error) {
+//            //将模糊后的图片缓存
+//            [[SDImageCache sharedImageCache] storeImage:weakSelf.myImageView.image forKey:urlOfBlur];
+//            BBLog(@"模糊化 ");
+//        }];
     }];
     
 }

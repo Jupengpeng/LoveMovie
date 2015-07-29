@@ -102,9 +102,13 @@
     
     return cell;
 }
-
+//点击进入电影
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    MyMovieDetailController * mVC = [[MyMovieDetailController alloc]init];
+    BuyMsModel * msModel = _dataArr[indexPath.row];
+    mVC.movieId = msModel.id;
+    mVC.locationId = self.currentCityId;
+    [self.navigationController pushViewController:mVC animated:YES];
     
     
 }

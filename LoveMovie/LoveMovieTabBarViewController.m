@@ -12,6 +12,7 @@
 #import "FindViewController.h"
 #import "MineViewController.h"
 #import "HomePageViewController.h"
+#import "CountainerControler.h"
 @interface LoveMovieTabBarViewController ()
 
 @end
@@ -21,7 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSArray * titleArr = @[@"首页",@"购票",@"商城",@"发现",@"我的"];
-    NSArray * classArr = @[@"HomePageViewController",@"BuyTicketViewController",@"MallViewController",@"FindViewController",@"MineViewController"];
+    NSArray * classArr = @[@"HomePageViewController",@"BuyTicketViewController",@"MallViewController",@"CountainerControler",@"MineViewController"];
     
     NSMutableArray * controllersArr = [[NSMutableArray alloc]init];
     for (int i = 0; i < 5; i ++) {

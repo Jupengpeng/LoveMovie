@@ -18,13 +18,18 @@
     self.currentPriLabel.text =[NSString stringWithFormat:@"￥%d" ,model.salePrice/100];
     self.oriPriceLabel.text = [NSString stringWithFormat:@"￥%d",model.cinemaPrice/100];
     self.typeLabel.text = [NSString stringWithFormat:@"%@/%@",model.versionDesc,model.language];
-    self.startTimeLabel.text = [JPControl transformToHourWithMinutes:model.spaceTime];
+    NSString * timeStr= [JPControl transformDateWithNumeber:model.endTime];
+    self.startTimeLabel.text = timeStr;
     
-    int overTime = model.spaceTime + model.length;
-    self.endLabel.text = [NSString stringWithFormat:@"%@散场" ,[JPControl transformToHourWithMinutes:overTime]];
-    
+    int overTime = model.endTime + model.length*60;
+    self.endLabel.text = [NSString stringWithFormat:@"%@散场" ,[JPControl transformDateWithNumeber:overTime]];
+    if (model.provider.count) {
     NSDictionary * dict = model.provider[0];
     self.dId =dict[@"dId"];
+    }else{
+        [self.buyBtn setTitle:@"暂不开放" forState:UIControlStateDisabled];
+        self.buyBtn.enabled= NO;
+    }
     
 }
 - (IBAction)buyClick:(id)sender {

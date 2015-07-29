@@ -14,9 +14,10 @@
 
 @implementation BaseViewController
 
-- (void) viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
+    self.automaticallyAdjustsScrollViewInsets= YES;
 }
 
 - (void)viewDidLoad {

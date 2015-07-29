@@ -114,7 +114,7 @@
         //城市id的传递 持续向下传递
         weakSelf.currentCityId = locationModel.cityId;
             [self initData];
-            [self initUI];
+            [self.tableView reloadData];
         }else{
             weakSelf.locationBtn.title = weakSelf.locationBtn.title;
             weakSelf.currentCityId = weakSelf.currentCityId;
@@ -129,7 +129,7 @@
 }
 
 - (void)initUI{
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenSize.width, kScreenSize.height)];
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, -64, kScreenSize.width, kScreenSize.height+64)];
     self.tableView.delegate = self;
     self.tableView.dataSource =self;
     [self.view addSubview:self.tableView];
@@ -215,7 +215,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.row) {
         case 0:{
-            return kHomeImageViewHeight-14;
+            return kHomeImageViewHeight+50;
         }
         case 1:
         {

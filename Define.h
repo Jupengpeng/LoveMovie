@@ -76,12 +76,51 @@
 
 #define kSeatsUrl @"http://api.m.mtime.cn/showtime/OnlineSeatsByShowTimeID.api?dId=%@"
 
+//电影详情 接口为位置和电影id
+#define kMyMovieDetailUrl @"http://api.m.mtime.cn/Showtime/MovieDetail.api?locationId=%d&movieId=%d"
+//长评论 接口为电影id
+#define kMyMovieLongCom @"http://api.m.mtime.cn/Movie/HotLongComments.api?movieId=%d&pageIndex=1"
+
+//短评论
+#define kMyMovieSgortCom @"http://api.m.mtime.cn/showtime/MovieComments.api?movieId=%d&pageIndex=1"
+
+//商城url
+#define kMarketUrl @"http://mall.wv.mtime.cn/Service/callback.mi/PageSubArea/MarketFirstPageNew.api"
 
 
+
+//票房url
+#define kTicketOfficeUrl @"http://api.m.mtime.cn/TopList/TopListOnNews.api"
+//票房详情
+#define kBoardDetail @"http://api.m.mtime.cn/TopList/TopListDetailsByRecommend.api?pageIndex=1&pageSubAreaID=%@"
+//1、4*每页头视图
+//http://api.m.mtime.cn/PageSubArea/GetRecommendationIndexInfo.api
+#define kFindTopUrl @"http://api.m.mtime.cn/PageSubArea/GetRecommendationIndexInfo.api"
+//2、新闻 接口为第几页
+//http://api.m.mtime.cn/News/NewsList.api?pageIndex=1
+#define kFindNewsUrl @"http://api.m.mtime.cn/News/NewsList.api?pageIndex=%d"
+//3、预告片
+//http://api.m.mtime.cn/PageSubArea/TrailerList.api
+#define kForeDisplayUrl @"http://api.m.mtime.cn/PageSubArea/TrailerList.api"
+//4、排行榜 接口同新闻
+//http://api.m.mtime.cn/TopList/TopListOfAll.api?pageIndex=1
+#define kSortBoardUrl @"http://api.m.mtime.cn/TopList/TopListOfAll.api?pageIndex=%d"
+//5、影评
+//http://api.m.mtime.cn/MobileMovie/Review.api?needTop=false
+#define kFindCommentUrl @"http://api.m.mtime.cn/MobileMovie/Review.api?needTop=false"
+
+
+#define kNewType @"news"
+#define kForeType @"type"
+#define kSortType @"sort"
+#define kReviewType @"review"
 //*****************************图片名称宏定义*******************************
 #define kSeatUnselected @"v10_seat_unselected"
 #define kSeatCantSelected @"v10_seat_cannot_select"
 #define kSeatSelected @"v10_seat_selected"
+#define kPlayIcon @"icon_preview_play"
+
+
 
 #ifndef __UpLine__
 //变参宏

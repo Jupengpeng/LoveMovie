@@ -100,7 +100,8 @@
 {
     // Load NavTabBar and content view to show on window
     // 初始化NavTabBar和内容并把它显示在窗口
-    _navTabBar = [[SCNavTabBar alloc] initWithFrame:CGRectMake(DOT_COORDINATE, 64, SCREEN_WIDTH, NAV_TAB_BAR_HEIGHT) showArrowButton:_showArrowButton];
+    _navTabBar = [[SCNavTabBar alloc] initWithFrame:self.scNavFrame showArrowButton:_showArrowButton];
+//    CGRectMake(DOT_COORDINATE, 64, SCREEN_WIDTH, NAV_TAB_BAR_HEIGHT)
     _navTabBar.delegate = self;
     _navTabBar.backgroundColor = _navTabBarColor;
     _navTabBar.lineColor = _navTabBarLineColor;
@@ -111,10 +112,10 @@
     _mainView = [[UIScrollView alloc] initWithFrame:CGRectMake(DOT_COORDINATE,CGRectGetMaxY(_navTabBar.frame), SCREEN_WIDTH, SCREEN_HEIGHT - CGRectGetMaxY(_navTabBar.frame)  - NAVIGATION_BAR_HEIGHT)];
     _mainView.delegate = self;
     _mainView.pagingEnabled = YES;
-    _mainView.bounces = _mainViewBounces;
+//    _mainView.bounces = _mainViewBounces;
     
 #warning 我修改了颜色
-    _navTabBar.backgroundColor = myGray;
+    _navTabBar.backgroundColor = self.navTabBarColor;
     
     _mainView.showsHorizontalScrollIndicator = NO;
     _mainView.contentSize = CGSizeMake(SCREEN_WIDTH * _subViewControllers.count, DOT_COORDINATE);

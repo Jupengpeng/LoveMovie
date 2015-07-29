@@ -50,7 +50,7 @@
     }
 }
 - (void)initUI{
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 100, kScreenSize.width, self.view.frame.size.height-80) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 100, kScreenSize.width, kScreenSize.height-77-100) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
@@ -80,7 +80,6 @@
 {
     NSArray * dayArr = @[@"今天",@"明天",@"后天",@"大后天"];
     NSString * url  = [NSString stringWithFormat:kHotTimeCinemaDetail,self.cinemaId,self.movieId];
-    BBLog(@"%@",url);
     [_manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (responseObject) {
             NSDictionary * dict =  [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
@@ -101,7 +100,6 @@
                     SofCinemaModel * sModel  = [[SofCinemaModel alloc]init];
                     [sModel setValuesForKeysWithDictionary:onePlay];
                     if (sModel.startTime!=sModel.endTime) {
-                        sModel.spaceTime = (sModel.endTime - sModel.startTime - 30028)/60;
                         [playsArr addObject:sModel];
                     }
                 }

@@ -19,6 +19,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    self.automaticallyAdjustsScrollViewInsets= NO;
 
     
 }
@@ -36,7 +37,6 @@
         self.cinemaViewController = [[BuyCinemaViewController alloc]init];
     }
     
-    self.automaticallyAdjustsScrollViewInsets= NO;
     
     //左上角位置button
     

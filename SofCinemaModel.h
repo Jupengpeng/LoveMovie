@@ -28,7 +28,6 @@
 @property (nonatomic) BOOL isCoupon;
 @property (nonatomic) BOOL isTicket;
 @property (nonatomic) BOOL isVaildTicket;
-@property (nonatomic)int spaceTime ;
 @property (nonatomic,strong) NSArray * provider;
 
 @end

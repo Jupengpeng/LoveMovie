@@ -10,6 +10,8 @@
 #import "HomeHotPointModel.h"
 #import "HomeHotImageModel.h"
 #import "UIImageView+WebCache.h"
+#import "NewsListModel.h"
+#import "ForeDisPlayModel.h"
 @interface HomeHotType2Cell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *showImageView;
@@ -20,5 +22,8 @@
 
 - (void)showDataWithHomeHotPointModel:(HomeHotPointModel *)model;
 
+- (void)showDataWithNewsListModel:(NewsListModel *)model;
+
+- (void)showDataWithForeDisPlayModel:(ForeDisPlayModel *)model;
 
 @end

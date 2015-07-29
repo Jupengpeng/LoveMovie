@@ -26,6 +26,9 @@
     comingController.title = @"即将上映";
     comingController.currentCityId = self.currentCityId;
     SCNavTabBarController * navTabBarController  = [[SCNavTabBarController alloc]init];
+    navTabBarController.scNavFrame = CGRectMake(0, 64, kScreenSize.width, 35);
+    navTabBarController.navTabBarColor = myGray;
+    navTabBarController.navTabBarLineColor = myRed;
     navTabBarController.subViewControllers = @[hotController,comingController];
     [navTabBarController addParentController:self];
 }

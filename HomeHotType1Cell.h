@@ -10,6 +10,8 @@
 #import "HomeHotPointModel.h"
 #import "HomeHotImageModel.h"
 #import "UIImageView+WebCache.h"
+#import "NewsListModel.h"
+#import "NewsImageModel.h"
 @interface HomeHotType1Cell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
@@ -21,5 +23,6 @@
 
 - (void)showDataWithHomeHotPointModel:(HomeHotPointModel *)model;
 
+- (void)showDataWithNewsListModel:(NewsListModel *)model;
 
 @end

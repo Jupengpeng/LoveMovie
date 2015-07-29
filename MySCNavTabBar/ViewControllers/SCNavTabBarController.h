@@ -22,6 +22,7 @@
 @property (nonatomic, strong)   UIColor     *navTabBarLineColor;
 @property (nonatomic, strong)   UIImage     *navTabBarArrowImage;
 
+@property (nonatomic) CGRect  scNavFrame;
 /**
  *  Initialize Methods
  *

@@ -126,8 +126,8 @@
     [self.view addSubview:screeImageView];
     
     self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.hallLabel.frame), kScreenSize.width, 160)];
-    self.scrollView.zoomScale = 1.0;
-    self.scrollView.minimumZoomScale = 1.0;   //最小倍数
+    self.scrollView.zoomScale = 0.6;
+    self.scrollView.minimumZoomScale = 0.5;   //最小倍数
     self.scrollView.maximumZoomScale = 2.0;  //最大倍数
     [self.view addSubview:self.scrollView];
     //座位

@@ -25,6 +25,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.tintColor = myRed;
     self.title = @"选择城市";
+    
 //设置返回button
     UIBarButtonItem * locationBtn = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:@selector(popParent)];
     [locationBtn setTintColor:[UIColor whiteColor]];
@@ -61,6 +62,10 @@
     __weak typeof(self) weakSelf = self;
     [[CCLocationManager shareLocation] getLocationCoordinate:^(CLLocationCoordinate2D coordinate) {
         NSString * locationUrl = [NSString stringWithFormat:kLocationUrl,coordinate.latitude,coordinate.longitude];
+        //解决https出现的错误
+        AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
+        securityPolicy.allowInvalidCertificates = YES;
+        _manager.securityPolicy = securityPolicy;
         [_manager GET:locationUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
             if (responseObject) {
                 NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
@@ -107,6 +112,8 @@
     return cell;
     
 }
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

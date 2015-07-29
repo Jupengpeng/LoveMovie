@@ -25,8 +25,15 @@
     LoveMovieTabBarViewController * tabBarController = [[LoveMovieTabBarViewController alloc]init];
     self.window.rootViewController = tabBarController;
     
+   // 6,1437966343081
+    NSTimeInterval  time = [[NSDate date]timeIntervalSinceReferenceDate];
     
+    //NSDate *date = [NSDate dateWithTimeIntervalSince1970:62135568000];
+    NSDate *data = [NSDate dateWithTimeIntervalSinceNow:-62135568];
     
+    NSDate *date2 = [NSDate dateWithTimeIntervalSince1970:1437911724];
+    
+
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

@@ -34,6 +34,21 @@
     return button;
 }
 
++ (NSString *)transformDateWithNumeber:(int)oriSeconds{
+    int seconds = oriSeconds - (8*60-16)*60 ;
+    NSDate * date = [NSDate dateWithTimeIntervalSince1970:seconds];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    
+    
+    //zzz表示时区，zzz可以删除，这样返回的日期字符将不包含时区信息。
+    
+    [dateFormatter setDateFormat:@"HH:mm"];
+    
+    NSString * str=  [dateFormatter stringFromDate:date];
+    
+    return str;
+}
+
 + (NSString *)transformToHourWithMinutes:(int)minutes{
     int h = 0;
     int m = 0;
