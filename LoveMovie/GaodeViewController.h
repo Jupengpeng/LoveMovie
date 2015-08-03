@@ -10,4 +10,10 @@
 
 @interface GaodeViewController : UIViewController
 
+@property (nonatomic,copy) NSString * address;
+
+@property (nonatomic,copy) NSString * cinemaName;
+
+@property (nonatomic) CLLocationCoordinate2D coodinate;
+
 @end

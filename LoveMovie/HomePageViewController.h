@@ -8,12 +8,16 @@
 
 #import "BaseViewController.h"
 #import "LocationViewController.h"
-
+#import "HomePageSearchController.h"
+#import "QRCodeScanController.h"
 @interface HomePageViewController : BaseViewController
 
 @property (nonatomic)int currentCityId ;
 
 @property (nonatomic,strong) UIBarButtonItem * locationBtn;
+
+@property (nonatomic)BOOL isRefreshing;
+@property (nonatomic)BOOL isLoadMore;
 
 
 @end

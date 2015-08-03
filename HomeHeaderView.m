@@ -193,9 +193,12 @@
 
 
     if (self.myScrollView.pageScrollView.contentOffset.x == index*(kCellSize.width)) {
-                NSLog(@"click cell at %ld",index);
-
-    
+                BBLog(@"click cell at %ld",index);
+        MyMovieDetailController * mVC = [[MyMovieDetailController alloc]init];
+        mVC.locationId =self.locationId;
+        mVC.movieId = self.movieId;
+        mVC.movieTitle = self.movieTitle;
+        [self.nivController pushViewController:mVC animated:YES];
     
     }
 }
@@ -225,7 +228,8 @@
     self.specialLabel.text = [NSString stringWithFormat:@"“%@”" ,movieModel.commonSpecial];
     
     [self processBlurImageWithModel:movieModel];
-
+    self.movieId = movieModel.movieId;
+    self.movieTitle = movieModel.titleCn;
     
 }
 //处理模糊图片，若不村子缓存，若存在直接读取
@@ -258,13 +262,34 @@
 
 - (void)btn1Click:(UIButton *)button
 {
-    BBLog(@"被点击了");
+
+
+    [self.tabController setSelectedIndex:1];
+}
+
+- (void)setMyBuyHotBlock:(MyJumpBuyTicketBlock)myBlock{
+    if (_myBuyBlock!= myBlock) {
+        _myBuyBlock = [myBlock copy];
+    }
+}
+
+- (void)setMyClickMovieBlock:(MyClickMovieBlock)myBlock{
+    if (_myMovieBlock!=myBlock) {
+        _myMovieBlock = [myBlock copy];
+    }
+    
     
 }
 
 - (void)buyBtnClick:(UIButton *)button
 {
-    BBLog(@"111");
+
+    BuyMovieDetailController * bVC = [[BuyMovieDetailController alloc]init];
+    bVC.locationId =self.locationId;
+    bVC.movieId = self.movieId;
+    bVC.movieName = self.movieTitle;
+    [self.nivController pushViewController:bVC animated:YES];
+    
     
 }
 

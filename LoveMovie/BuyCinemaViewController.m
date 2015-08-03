@@ -36,6 +36,8 @@
 
 - (void)initData{
 
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
     self.allCinemaUrl = [NSString stringWithFormat:kAllCinemaUrl,self.currentCityId];
 
     
@@ -47,10 +49,10 @@
                 CinemaModel * cinemaModel = [[CinemaModel alloc]init];
                 [cinemaModel setValuesForKeysWithDictionary:dict];
                 cinemaModel.distance = [self getDistanceFrom:self.myCoordinate toDistWithLatitude:cinemaModel.latitude Longitude:cinemaModel.longitude];
-                [self.cinemasArr addObject:cinemaModel];
+                [weakSelf.cinemasArr addObject:cinemaModel];
             }
 
-            
+            [SVProgressHUD dismiss];
             [weakSelf.tableView reloadData];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

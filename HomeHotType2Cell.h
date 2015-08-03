@@ -19,6 +19,10 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descLabel;
+@property (nonatomic,strong)UIImageView * playIcon;
+
+@property (nonatomic) UINavigationController * nivController;
+
 
 - (void)showDataWithHomeHotPointModel:(HomeHotPointModel *)model;
 

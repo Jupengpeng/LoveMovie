@@ -36,8 +36,11 @@
         self.headerArr = [[NSMutableArray alloc]init];
     }
     
-    UIBarButtonItem * backItem = [[UIBarButtonItem alloc]initWithTitle:@"购票" style:UIBarButtonItemStyleBordered target:self action:@selector(pop)];
-    backItem.tintColor = [UIColor whiteColor];
+    
+    UIButton *button = [MyControl creatButtonWithFrame:CGRectMake(0, 0, 17, 26) target:self sel:@selector(pop) tag:0 image:@"white_right_arrow" title:nil];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     self.navigationItem.leftBarButtonItem = backItem;
     
     
@@ -50,7 +53,8 @@
 }
 //下载头视图数据
 - (void)downLoadHeaderData{
-    
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
     //头视图部分的数据下载
     NSString * headerUrl = [NSString stringWithFormat:kCinemaDetHeaderUrl,self.cinemaId];
     __weak typeof(self) weakSelf = self;
@@ -59,6 +63,7 @@
             NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             weakSelf.headerModel =  [[CInemaHeaderModel alloc]init];
             [weakSelf.headerModel setValuesForKeysWithDictionary:dict];
+            //展示头视图
             [weakSelf showHeaderWithModel:weakSelf.headerModel];
         }
         
@@ -69,7 +74,7 @@
         [weakSelf downloadDisplayTimeDataWithMovieId:firstMovie.movieId];
         
         
-        
+        [SVProgressHUD dismiss];
         [weakSelf.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         BBLog(@"下载失败");
@@ -123,13 +128,19 @@
     
     CinemaInHeaderModel * cinemaModel = [[CinemaInHeaderModel alloc]init];
     [cinemaModel setValuesForKeysWithDictionary:headerModel.cinema];
+    //将电影的信息加入数组
     for (NSDictionary * dict in headerModel.movies) {
         MovieInHeaderModel * movieModel  = [[MovieInHeaderModel alloc]init];
         [movieModel setValuesForKeysWithDictionary:dict];
         [self.headerArr addObject:movieModel];
     }
+    //电影院地址按钮
+    UIButton * cinemaButton = [JPControl createButtonWithFrame:CGRectMake(0, 0, kScreenSize.width, 80) borderColor:[UIColor blackColor] borderWidth:0.50f titleColor:nil adjustWidth:nil textAligment:NSTextAlignmentCenter target:self action:@selector(jumpToGaoDeMap:)];
     
-    UIButton * cinemaButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, kScreenSize.width, 80)];
+    
+    
+    
+    
     //影院名字
     UILabel * nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, kScreenSize.width, 20)];
     nameLabel.text = cinemaModel.name;
@@ -140,6 +151,7 @@
     addressLabel.text = cinemaModel.address;
     addressLabel.font  =[UIFont systemFontOfSize:13.0];
     addressLabel.textColor = [UIColor darkGrayColor];
+    
     [cinemaButton addSubview:addressLabel];
     
     [headerView addSubview:cinemaButton];
@@ -207,12 +219,19 @@
 
 }
 
+- (void)jumpToGaoDeMap:(UIButton *)button{
+    CinemaLocationController * cVC=  [[CinemaLocationController alloc]init];
+    [self.navigationController pushViewController:cVC animated:YES];
+    
+}
+
 - (void)movieBtnCick:(UIButton *)button{
     
     if (button.selected) {
         NSLog(@"跳入电影界面");
-        
-        
+        MyMovieDetailController * mVC = [[MyMovieDetailController alloc]init];
+        mVC.movieId = button.tag ;
+        [self.navigationController pushViewController:mVC animated:YES];
         return;
     }
     

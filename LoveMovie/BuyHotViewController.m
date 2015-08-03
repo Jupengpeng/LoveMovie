@@ -34,12 +34,19 @@
     }
     _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
 
+    
     [self initData];
     [self initUI];
     
 }
 
 - (void)initData{
+    
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
+    if (_dataArr) {
+        [_dataArr removeAllObjects];
+    }
     NSString * url  = [NSString stringWithFormat:kBuyHotMovie,self.currentCityId];
     __weak typeof(self) weakSelf = self;
     [_manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -50,10 +57,11 @@
             for (NSDictionary * msDict in hotModel.ms) {
                 BuyMsModel * msModel = [[BuyMsModel alloc]init];
                 [msModel setValuesForKeysWithDictionary:msDict];
-                msModel.locationId = self.currentCityId;
+                msModel.locationId = weakSelf.currentCityId;
                 [_dataArr addObject:msModel];
             }
             
+            [SVProgressHUD dismiss];
             [weakSelf.hotTableView reloadData];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -70,6 +78,7 @@
     [self.view addSubview:self.hotTableView];
     [self.hotTableView registerNib:[UINib nibWithNibName:@"BuyHotCell" bundle:nil] forCellReuseIdentifier:kBuyHotCellId];
 }
+
 
 
 #pragma mark - <UITableViewDataSource,UITableViewDataSource>

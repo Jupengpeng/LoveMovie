@@ -18,6 +18,13 @@
 //1、搜索接口默认热词界面
 //http://api.m.mtime.cn/Search/HotKeyWords.api
 #define kSearchHotUrl @"http://api.m.mtime.cn/Search/HotKeyWords.api"
+//搜索接口
+#define kSearchUrl @"http://api.m.mtime.cn/Search/SearchSuggestionNew.api?keyword=%@"
+//搜索结果接口 分别为 类型个数接口 城市id 关键字 以及页码
+#define kSearchResultUrl @"http://api.m.mtime.cn/Showtime/SearchVoice.api?searchType=%d&locationId=489&Keyword=%@&pageIndex=%d"
+
+
+
 #define kZZLid 489
 #define myRed [UIColor colorWithRed:178.0/255 green:34.0/255  blue:34.0/255 alpha:1.0f]
 #define myPink [UIColor colorWithRed:64.0/255 green:224.0/255  blue:208.0/255 alpha:1.0f]
@@ -65,6 +72,11 @@
 //@"http://cdn.m.mtime.cn/Service/callback.mi/showtime/basecitydata.api?locationId=%d"
 
 #define kCinemaDetailUrl @"http://api.m.mtime.cn/Showtime/ShowTimesByCinemaMovieDate.api?cinemaId=%d&date=%@&movieId=%d"
+//电影院真正的详情
+#define kCinemaLocationUrl  @"http://api.m.mtime.cn/Cinema/Detail.api?cinemaId=%d"
+//上个连接中的评论 接口为电影院id和 页码
+#define kCinemaCommentUrl @"http://api.m.mtime.cn/Cinema/Comment.api?cinemaId=%d&pageIndex=%d"
+
 #define kCinemaDetHeaderUrl @"http://api.m.mtime.cn/Showtime/ShowtimeMovieAndDateListByCinema.api?cinemaId=%d"
 
 //位置 latitude 维度 longitude 经度
@@ -77,12 +89,18 @@
 #define kSeatsUrl @"http://api.m.mtime.cn/showtime/OnlineSeatsByShowTimeID.api?dId=%@"
 
 //电影详情 接口为位置和电影id
-#define kMyMovieDetailUrl @"http://api.m.mtime.cn/Showtime/MovieDetail.api?locationId=%d&movieId=%d"
+#define kMyMovieDetailUrl @"http://api.m.mtime.cn/Movie/Detail.api?locationId=%d&movieId=%d"
 //长评论 接口为电影id
 #define kMyMovieLongCom @"http://api.m.mtime.cn/Movie/HotLongComments.api?movieId=%d&pageIndex=1"
 
 //短评论
 #define kMyMovieSgortCom @"http://api.m.mtime.cn/showtime/MovieComments.api?movieId=%d&pageIndex=1"
+#define kMyMovieIUmagesAll @"http://api.m.mtime.cn/Movie/ImageAll.api?movieId=%d"
+
+
+//人物详情
+#define kMyPersonDetail @"http://api.m.mtime.cn/Person/Detail.api?locationId=%d&personId=%d"
+
 
 //商城url
 #define kMarketUrl @"http://mall.wv.mtime.cn/Service/callback.mi/PageSubArea/MarketFirstPageNew.api"
@@ -108,6 +126,12 @@
 //5、影评
 //http://api.m.mtime.cn/MobileMovie/Review.api?needTop=false
 #define kFindCommentUrl @"http://api.m.mtime.cn/MobileMovie/Review.api?needTop=false"
+//新闻详情
+#define kNewsDetailUrl @"http://api.m.mtime.cn/News/Detail.api?newsId=%d"
+//排行榜详情 两个接口 分比为 页码和 id
+#define kTopListDetailUrl @"http://api.m.mtime.cn/TopList/TopListDetails.api?pageIndex=%d&topListId=%d"
+//影评 详情
+#define kReviewDetailUrl @"http://api.m.mtime.cn/Review/Detail.api?reviewId=%d"
 
 
 #define kNewType @"news"

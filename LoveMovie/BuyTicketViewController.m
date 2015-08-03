@@ -20,7 +20,7 @@
     
     [super viewWillAppear:animated];
     self.automaticallyAdjustsScrollViewInsets= NO;
-
+    
     
 }
 
@@ -44,14 +44,17 @@
     self.locationBtn = [[UIBarButtonItem alloc]initWithTitle:locationName style:UIBarButtonItemStyleBordered target:self action:@selector(locationClick:)];
     [self.locationBtn setTintColor:[UIColor whiteColor]];
     self.navigationItem.leftBarButtonItem = self.locationBtn;
-//获取当前地址
+    //获取当前地址
     [self getCurrentLocation];
-
+    
     
     
 }
 
 - (void)getCurrentLocation{
+    
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
     
     __weak typeof(self) weakSelf = self;
     [[CCLocationManager shareLocation] getLocationCoordinate:^(CLLocationCoordinate2D coordinate) {
@@ -70,7 +73,7 @@
                 
                 
                 [self initUI];
-
+                
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             BBLog(@"位置数据下载失败");
@@ -86,7 +89,7 @@
     __weak typeof(self) weakSelf=  self;
     
     [lvc setMyBlock:^(LocationModel *locationModel) {
-
+        
         if (locationModel.name) {
             
             weakSelf.locationBtn.title = locationModel.name;
@@ -95,6 +98,8 @@
             
             weakSelf.cinemaViewController.currentCityId = locationModel.cityId;
             weakSelf.movieViewController.currentCityId = locationModel.cityId;
+            
+        
             [self initUI];
         }else{
             weakSelf.locationBtn.title = weakSelf.locationBtn.title;
@@ -103,9 +108,9 @@
         }
     }];
     [self.navigationController pushViewController:lvc animated:YES];
-
-
-
+    
+    
+    
 }
 
 
@@ -124,10 +129,10 @@
         self.segmentControl.layer.borderColor = [UIColor whiteColor].CGColor;
         self.segmentControl.tintColor = [UIColor whiteColor];
         self.navigationItem.titleView= self.segmentControl;
-        [self.segmentControl setSelectedSegmentIndex:0];
         [self.segmentControl addTarget:self action:@selector(segmentControlAction:) forControlEvents:UIControlEventValueChanged];
     }
-    
+    [self.segmentControl setSelectedSegmentIndex:0];
+
     
     
 }
@@ -142,7 +147,7 @@
         
         
         [self addChildViewController:self.movieViewController];
-        [self.view addSubview:self.movieViewController.view];  
+        [self.view addSubview:self.movieViewController.view];
     }
     else{
         if (self.movieViewController) {

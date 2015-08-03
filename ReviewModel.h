@@ -16,6 +16,7 @@
 @property (nonatomic,copy) NSString * rating;
 @property (nonatomic,copy) NSString * title;
 @property (nonatomic,copy) NSString * summary;
+@property (nonatomic,strong) NSDictionary *relatedObj;
 //"id": 7905596,
 //"nickname": "Cydeny",
 //"userImage": "http://img32.mtime.cn/up/2013/01/08/081313.64016596_128X128.jpg",

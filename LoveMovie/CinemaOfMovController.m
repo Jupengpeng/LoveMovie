@@ -34,8 +34,11 @@
     _manager = [AFHTTPRequestOperationManager manager];
     _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     //设置导航栏按钮
-    UIBarButtonItem * backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:@selector(pop)];
-    backItem.tintColor = [UIColor whiteColor];
+    
+    UIButton *button = [MyControl creatButtonWithFrame:CGRectMake(0, 0, 17, 26) target:self sel:@selector(pop) tag:0 image:@"white_right_arrow" title:nil];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     self.navigationItem.leftBarButtonItem = backItem;
 
     [self initUI];
@@ -43,6 +46,9 @@
 }
 
 - (void)initData{
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
+    
     NSString * url  = [NSString stringWithFormat:kSeatsUrl,self.myDId ];
     
     [_manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -55,6 +61,7 @@
                 [model setValuesForKeysWithDictionary:dict];
                 [self.seatsArr addObject:model];
             }
+            [SVProgressHUD dismiss];
             [self showWholeCinemaWithInCinemaModel:cinemaModel];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

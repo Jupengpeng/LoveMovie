@@ -16,10 +16,17 @@
 - (IBAction)MOREBUTTON:(id)sender {
     BBLog(@"今日热点");
     
+    [self.tabController setSelectedIndex:2];
     
 }
 - (IBAction)movieButton:(UIButton *)sender {
     BBLog(@"电影");
+
+    if (_myMovieBlock) {
+        _myMovieBlock(self.movieId);
+    }
+    
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -39,8 +46,15 @@
     self.titleEnLabel.text = model.movie.titleEn;
     self.titleEnLabel.adjustsFontSizeToFitWidth= YES;
     [self.littleImageView sd_setImageWithURL:[NSURL URLWithString:model.movie.image] placeholderImage:[UIImage  imageNamed:@"empty"]];
+    self.movieId = model.movie.movieId;
+    self.movieTitle = model.title;
     
-    
+}
+
+- (void)setMyHotBlock:(MyHotMovieBlock)myBlock{
+    if (_myMovieBlock !=myBlock) {
+        _myMovieBlock = [myBlock copy];
+    }
 }
 
 

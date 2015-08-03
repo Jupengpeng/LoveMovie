@@ -12,4 +12,7 @@
 - (void)getMoreHotPointUrl:(NSString * )url;
 @property (weak, nonatomic) IBOutlet UIButton *getMoreHotPointsBtn;
 
+@property (nonatomic) UINavigationController * nivController;
+
+
 @end

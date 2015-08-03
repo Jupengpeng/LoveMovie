@@ -10,6 +10,7 @@
 
 @implementation HomeHotPointCell
 - (IBAction)getMoreHotPoints:(id)sender {
+    self.getMoreHotPointsBtn.enabled = NO;
 }
 
 - (void)awakeFromNib {

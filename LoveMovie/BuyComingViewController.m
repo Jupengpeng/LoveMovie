@@ -47,6 +47,8 @@
 }
 
 - (void)initData{
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
     NSString * url = [NSString stringWithFormat:kBuyComingMovie,self.currentCityId];
     [_manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (responseObject) {
@@ -78,7 +80,7 @@
 
             }
  
-
+            [SVProgressHUD dismiss];
             [self.tableView reloadData];
             [self.collectionView reloadData];
         }

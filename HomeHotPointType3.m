@@ -29,21 +29,22 @@
 }
 - (IBAction)firstBtnClick:(id)sender {
     
-    
+    [self.tabBarController setSelectedIndex:2];
+
     
 }
 
 
 - (IBAction)secondBtnClick:(id)sender {
-    
+    [self.tabBarController setSelectedIndex:2];
     
     
 }
 - (IBAction)thirdBtnClick:(id)sender {
-    
+    [self.tabBarController setSelectedIndex:2];
 }
 - (IBAction)fourthButton:(id)sender {
-    
+    [self.tabBarController setSelectedIndex:2];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

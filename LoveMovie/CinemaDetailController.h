@@ -16,6 +16,8 @@
 #import "CinemaInHeaderModel.h"
 #import "CInemaHeaderModel.h"
 #import "UIButton+WebCache.h"
+#import "MyMovieDetailController.h"
+#import "CinemaLocationController.h"
 @interface CinemaDetailController : BaseViewController
 
 

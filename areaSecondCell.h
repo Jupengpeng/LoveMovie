@@ -10,6 +10,10 @@
 #import "UIButton+WebCache.h"
 #import "HomeAreaSecondModel.h"
 @interface areaSecondCell : UITableViewCell
+
+@property (nonatomic) UINavigationController * nivController;
+
+
 @property (weak, nonatomic) IBOutlet UIButton *allProductsButton;
 @property (weak, nonatomic) IBOutlet UIButton *fifthButton;
 @property (weak, nonatomic) IBOutlet UIButton *firstButton;

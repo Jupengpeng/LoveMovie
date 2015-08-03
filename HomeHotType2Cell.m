@@ -25,13 +25,16 @@
 }
 
 - (void)showDataWithNewsListModel:(NewsListModel *)model{
-
+    if (!self.playIcon) {
+        self.playIcon=  [[UIImageView alloc]initWithFrame:CGRectMake(self.showImageView.frame.size.width-42, self.showImageView.frame.size.height-42, 40,40)];
+    }
     
     if (model.type==2) {
-        UIImageView * imageView=  [[UIImageView alloc]initWithFrame:CGRectMake(self.showImageView.frame.size.width-42, self.showImageView.frame.size.height-42, 40,40)];
-        imageView.image = [UIImage imageNamed:kPlayIcon];
-        [self.showImageView addSubview:imageView];
-
+        self.playIcon.hidden = NO;
+        self.playIcon.image = [UIImage imageNamed:kPlayIcon];
+        [self.showImageView addSubview:self.playIcon];
+    }else{
+        self.playIcon.hidden = YES;
     }
             self.titleLabel.text = model.title;
             self.descLabel.text =[NSString stringWithFormat:@"%@\n                评论%d", model.title2,model.commentCount];

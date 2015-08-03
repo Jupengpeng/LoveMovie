@@ -18,6 +18,7 @@
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     self.automaticallyAdjustsScrollViewInsets= YES;
+    self.navigationController.navigationBarHidden = NO;
 }
 
 - (void)viewDidLoad {

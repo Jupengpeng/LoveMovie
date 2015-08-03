@@ -13,6 +13,9 @@
 #import "UIButton+WebCache.h"
 @interface HomeScrollCell : UITableViewCell<UIScrollViewDelegate>
 
+@property (nonatomic) UINavigationController * nivController;
+
+
 @property (nonatomic,strong) UIImageView * firstImageView;
 @property (nonatomic,strong) UIImageView * secondImageView;
 

@@ -21,19 +21,25 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSArray * titleArr = @[@"首页",@"购票",@"商城",@"发现",@"我的"];
-    NSArray * classArr = @[@"HomePageViewController",@"BuyTicketViewController",@"MallViewController",@"CountainerControler",@"MineViewController"];
-    
+    NSArray * titleArr = @[@"首页",@"购票",@"发现",@"我的"];
+    NSArray * classArr = @[@"HomePageViewController",@"BuyTicketViewController",@"CountainerControler",@"MineViewController"];
+    NSArray * imagesArr = @[@"home_on",@"payticket_on",@"discover_on",@"myinfo_on"];
     NSMutableArray * controllersArr = [[NSMutableArray alloc]init];
-    for (int i = 0; i < 5; i ++) {
+    for (int i = 0; i < 4; i ++) {
         Class cls = NSClassFromString(classArr[i]);
         UITableViewController * controller =  [[cls alloc]init];
         UINavigationController * niv = [[UINavigationController alloc]initWithRootViewController:controller];
+        
+        niv.tabBarItem.image = [UIImage imageNamed:imagesArr[i]];
+
+        
         controller.title = titleArr[i];
         
         [controllersArr addObject:niv];
     }
+//    @[@"tabbar_icon_news_highlight",@"tabbar_icon_reader_highlight",@"tabbar_icon_found_highlight",@"tabbar_icon_me_highlight"];
     
+//    self.tabBarController.tabBar.barTintColor = myRed;
     
     self.viewControllers = controllersArr;
   

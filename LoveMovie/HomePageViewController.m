@@ -23,6 +23,7 @@
 #import "HomeAdvModel.h"
 #import "HomeHeaderModel.h"
 #import "HomeHeaderView.h"
+#import "NewsDetailViewController.h"
 #define kareaSecondCellId @"areaSecondCell"
 #define kHotpointButtonCellId @"HomeHotPointCell"
 #define kHomeHotType1CellId @"HomeHotType1Cell"
@@ -58,16 +59,29 @@
     _manager = [AFHTTPRequestOperationManager manager];
     _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
 
+    self.tabBarController.tabBar.tintColor = myRed;
+
 
     
     //左上角位置button
     
     NSString * locationName = @"位置";
+
     self.locationBtn = [[UIBarButtonItem alloc]initWithTitle:locationName style:UIBarButtonItemStyleBordered target:self action:@selector(locationClick:)];
     [self.locationBtn setTintColor:[UIColor whiteColor]];
     self.navigationItem.leftBarButtonItem = self.locationBtn;
+    //二维码扫描
+    UIBarButtonItem *scanBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_scan_barcode"] style:UIBarButtonItemStylePlain target:self action:@selector(scanClick:)];
+    scanBtn.tintColor = [UIColor whiteColor];
+    //右上角搜索
+    UIBarButtonItem *searchBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"v10_search_icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchClick:)];
+    searchBtn.tintColor = [UIColor whiteColor];
+    self.navigationItem.rightBarButtonItems = @[searchBtn,scanBtn];
+    
+    
+    
     [self initUI];
-
+    [self createHeaderRefreshView];
     //获取当前地址
     [self getCurrentLocation];
     
@@ -75,8 +89,26 @@
 
     
 }
+
+- (void)searchClick:(UIBarButtonItem * )item{
+    
+    HomePageSearchController * sVC = [[HomePageSearchController alloc]init];
+    [self.navigationController pushViewController:sVC animated:YES];
+    
+}
+
+- (void)scanClick:(UIBarButtonItem *)item{
+    QRCodeScanController * qVC = [[QRCodeScanController alloc]init];
+    [self.navigationController pushViewController:qVC animated:YES];
+    
+    
+}
+
+
 - (void)getCurrentLocation{
     
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
     __weak typeof(self) weakSelf = self;
     
 
@@ -113,8 +145,9 @@
         weakSelf.locationBtn.title = locationModel.name;
         //城市id的传递 持续向下传递
         weakSelf.currentCityId = locationModel.cityId;
-            [self initData];
-            [self.tableView reloadData];
+            [weakSelf initData];
+            [weakSelf.tableView reloadData];
+            
         }else{
             weakSelf.locationBtn.title = weakSelf.locationBtn.title;
             weakSelf.currentCityId = weakSelf.currentCityId;
@@ -126,6 +159,29 @@
     
     
     
+}
+//刷新功能 子类调用
+- (void)createHeaderRefreshView{
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self.tableView addRefreshHeaderViewWithAniViewClass:[JHRefreshCommonAniView class] beginRefresh:^{
+        if (weakSelf.isRefreshing) {
+            return ;
+        }
+        weakSelf.isRefreshing = YES;
+        [weakSelf getCurrentLocation];
+    }];
+    
+}
+
+- (void)endRefreshing {
+    if (self.isRefreshing) {
+        self.isRefreshing = NO;//标记刷新结束
+        //正在刷新 就结束刷新
+        [self.tableView headerEndRefreshingWithResult:JHRefreshResultNone];
+    }
+
 }
 
 - (void)initUI{
@@ -145,6 +201,9 @@
     
 }
 - (void)initData{
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
+    
     NSString * headerUrl = [NSString stringWithFormat:kHomeHeaderUrl,self.currentCityId];
     
     __weak typeof(self) weakSelf = self;
@@ -156,8 +215,10 @@
             
         }
         
+        [SVProgressHUD dismiss];
         
         [weakSelf.tableView reloadData];
+        [weakSelf endRefreshing];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"下载失败%@",error );
     }];
@@ -219,11 +280,11 @@
         }
         case 1:
         {
-            return 530;
+            return 0;
         }
         case 2:
         {
-            return 98;
+            return 0;
         }
             //
         case 3:
@@ -282,22 +343,28 @@
         case 0:{
             HomeHeaderView * cell = [tableView dequeueReusableCellWithIdentifier:kHomeHeaderViewId forIndexPath:indexPath];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+
+            
+            cell.locationId = self.currentCityId;
+            cell.nivController = self.navigationController;
+            cell.tabController = self.tabBarController;
             [cell showHomeHeaderCellDataWithHeaderModel:self.headerModel];
             return cell;
             
             
         }
-        case 1:{
-            areaSecondCell * cell  = [tableView dequeueReusableCellWithIdentifier:kareaSecondCellId forIndexPath:indexPath];
-            HomeAreaSecondModel * areaSecondModel = self.homePageModel.areaSecond;
-            [cell showDataWithAreaSecondModel:areaSecondModel];
-            return cell;
-        }
-        case 2:{
-            HomeScrollCell *cell = [tableView dequeueReusableCellWithIdentifier:kHomeScrollCellId forIndexPath:indexPath];
-            [cell showDataWithAdvModel:self.homePageModel];
-            return cell;
-        }
+//        case 1:{
+//            areaSecondCell * cell  = [tableView dequeueReusableCellWithIdentifier:kareaSecondCellId forIndexPath:indexPath];
+//            HomeAreaSecondModel * areaSecondModel = self.homePageModel.areaSecond;
+//            [cell showDataWithAreaSecondModel:areaSecondModel];
+//            return cell;
+//        }
+//        case 2:{
+//            HomeScrollCell *cell = [tableView dequeueReusableCellWithIdentifier:kHomeScrollCellId forIndexPath:indexPath];
+//            [cell showDataWithAdvModel:self.homePageModel];
+//            return cell;
+//        }
         case 3:{
             HomeHotPointCell * cell = [tableView dequeueReusableCellWithIdentifier:kHotpointButtonCellId forIndexPath:indexPath];
             
@@ -355,12 +422,24 @@
             }        }
         case 7:{
             HomeHotPointType3 * cell = [tableView  dequeueReusableCellWithIdentifier:kHomeHotPointType3Id forIndexPath:indexPath];
-            
+            cell.tabBarController = self.tabBarController;
             return cell;
         }
         case 8:{
             HomeHotMovieCell * cell = [tableView dequeueReusableCellWithIdentifier:kHomeHotMovieCellId forIndexPath:indexPath];
+            
+            [cell setMyHotBlock:^(int Id) {
+                BBLog(@"%d",Id);
+            }];
+            cell.nivController =self.navigationController;
+            cell.tabController = self.tabBarController;
             [cell showDataWithHomeHotMovieModel:self.homePageModel.hotMovie];
+            
+            [cell setMyHotBlock:^(int Id) {
+                MyMovieDetailController * mVC = [[MyMovieDetailController alloc]init];
+                mVC.movieId = Id;
+                [self.navigationController pushViewController:mVC animated:YES];
+            }];
             return cell;
         }
             
@@ -373,7 +452,57 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    switch (indexPath.row) {
+
+            
+        case 3:
+        {
+            [self.tabBarController setSelectedIndex:2];
+            break;
+        }
+            //两种cell根据type判断
+        case 4:
+        {
+            HomeHotPointModel * model = self.homePageModel.hotPoints[0];
+            NewsDetailViewController * nVC = [[NewsDetailViewController alloc]init];
+            nVC.newsId = model.id;
+            [self.navigationController pushViewController:nVC animated:YES];
+            break;
+        }
+        case 5:
+        {
+            HomeHotPointModel * model = self.homePageModel.hotPoints[1];
+            NewsDetailViewController * nVC = [[NewsDetailViewController alloc]init];
+
+            nVC.newsId = model.id;
+            [self.navigationController pushViewController:nVC animated:YES];
+        }
+            break;
+        case 6:
+        {
+            HomeHotPointModel * model = self.homePageModel.hotPoints[2];
+            NewsDetailViewController * nVC = [[NewsDetailViewController alloc]init];
+
+            nVC.newsId = model.id;
+            [self.navigationController pushViewController:nVC animated:YES];
+        }
+            break;
+        case 7:
+        {
+
+        }
+            break;
+        case 8:
+        {
+
+        
+        
+        }
+            break;
+            
+        default:
+            break;
+    }
     
 }
 - (void)didReceiveMemoryWarning {

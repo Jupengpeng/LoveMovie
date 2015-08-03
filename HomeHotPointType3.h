@@ -15,4 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *fourthButton;
 @property (weak, nonatomic) IBOutlet UILabel *label;
 
+@property (nonatomic,strong)UITabBarController *  tabBarController ;
+
+
 @end

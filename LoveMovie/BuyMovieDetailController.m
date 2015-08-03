@@ -32,9 +32,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor  =[UIColor whiteColor];
+    
+    
+
     //设置导航栏按钮
-    UIBarButtonItem * backItem = [[UIBarButtonItem alloc]initWithTitle:@"购票" style:UIBarButtonItemStyleBordered target:self action:@selector(pop)];
-    backItem.tintColor = [UIColor whiteColor];
+
+    UIButton *button = [MyControl creatButtonWithFrame:CGRectMake(0, 0, 17, 26) target:self sel:@selector(pop) tag:0 image:@"white_right_arrow" title:nil];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+
     self.navigationItem.leftBarButtonItem = backItem;
     [self addTitleViewWithTitle:self.movieName];
     [self initMany];
@@ -78,6 +85,9 @@
 }
 //初始化时间和时间按按钮
 - (void)initTime{
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
+    
     NSString * timeUrl = [NSString stringWithFormat:kHotTimeUrl,self.locationId,self.movieId];
     [_manager GET:timeUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (responseObject) {
@@ -102,15 +112,21 @@
 }
 
 - (void)showTimeButtons{
-    CGFloat w = kScreenSize.width/self.timeArr.count;
-    NSArray * dayArr = @[@"今天",@"明天",@"后天",@"大后天"];
+    CGFloat w = kScreenSize.width/3;
+    UIScrollView * scrollView= [[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kScreenSize.width, 40)];
+    scrollView.showsHorizontalScrollIndicator = NO;
     for (NSInteger i = 0; i < self.timeArr.count; i ++) {
         TimeModel * timeModel = self.timeArr[i];
         //处理日期格式
         NSString * date = [self secondTransformTimeWithStr:timeModel.dateValue];
         
-        UIButton * timeButton = [[UIButton alloc]initWithFrame:CGRectMake(w*i, 64, w, 40)];
-        [timeButton setTitle:[NSString stringWithFormat:@"%@(%@)",dayArr[i],date] forState:UIControlStateNormal];
+        UIButton * timeButton = [[UIButton alloc]initWithFrame:CGRectMake(w*i, 0, w, 40)];
+        if (i<1) {
+            [timeButton setTitle:[NSString stringWithFormat:@"今天(%@)",date] forState:UIControlStateNormal];
+        }else{
+            [timeButton setTitle:[NSString stringWithFormat:@"%@",date] forState:UIControlStateNormal];
+
+        }
         timeButton.titleLabel.adjustsFontSizeToFitWidth=YES;
         timeButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
         [timeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -121,9 +137,10 @@
         if (i==0) {
             timeButton.selected = YES;
         }
-        [self.view addSubview:timeButton];
+        [scrollView addSubview:timeButton];
     }
-    
+    scrollView.contentSize = CGSizeMake(w*self.timeArr.count, 0);
+    [self.view addSubview:scrollView];
     
     //添加button
     NSArray * titles = @[@"全部",@"附近",@"价格"];
@@ -264,6 +281,8 @@
 
 //根据日期下载数据
 - (void)downloadDataWithDateStr:(NSString *)date{
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
     if (self.cinemaArr) {
         [self.cinemaArr removeAllObjects];
     }
@@ -281,7 +300,9 @@
                 [self.cinemaArr addObject:cinemaModel];
             }
         }
+    
         [self.tableView reloadData];
+        [SVProgressHUD dismiss];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         BBLog(@"下载失败");
     }];

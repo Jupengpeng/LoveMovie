@@ -14,4 +14,9 @@
 @property (nonatomic) int locationId ;
 
 @property (nonatomic) int movieId ;
+
+@property (nonatomic,copy) NSString * movieTitle;
+
+@property (nonatomic,strong) UITableView * tableView;
+
 @end

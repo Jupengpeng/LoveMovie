@@ -14,14 +14,29 @@
 #import "UIImageView+WebCache.h"
 #import "OTPageScrollView.h"
 #import "OTPageView.h"
+#import "BuyHotViewController.h"
+#import "BuyComingViewController.h"
+#import "BuyCinemaViewController.h"
+#import "BuyMovieDetailController.h"
+#import "MyMovieDetailController.h"
+
+
+typedef void (^MyJumpBuyTicketBlock) (int movieId);
+typedef void (^MyClickMovieBlock) (int movieId);
 
 @interface HomeHeaderView : UITableViewCell<OTPageScrollViewDataSource,OTPageScrollViewDelegate>
 
 {
     AFHTTPRequestOperationManager * _manager;
     UIImageView * _imageView;
+
+    
+    MyJumpBuyTicketBlock _myBuyBlock;
+    MyClickMovieBlock _myMovieBlock;
 }
 
+@property (nonatomic) UINavigationController * nivController;
+@property (nonatomic,strong) UITabBarController * tabController;
 
 
 @property (nonatomic,strong) UIImageView * myImageView;
@@ -44,5 +59,15 @@
 @property (nonatomic,strong) NSMutableArray * imageViewArr;
 
 @property (nonatomic,strong) HomeHeaderModel * headerModel;
+
+@property (nonatomic) int movieId ;
+@property (nonatomic) int locationId ;
+@property (nonatomic,copy) NSString * movieTitle;
+
+
 - (void)showHomeHeaderCellDataWithHeaderModel:(HomeHeaderModel *)headerModel;
+
+- (void)setMyBuyHotBlock:(MyJumpBuyTicketBlock)myBlock;
+
+- (void)setMyClickMovieBlock:(MyClickMovieBlock)myBlock;
 @end

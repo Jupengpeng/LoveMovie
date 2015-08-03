@@ -11,6 +11,11 @@
 #import "CCLocationManager.h"
 #import "LocationModel.h"
 #import "MyControl.h"
+#import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import "JHRefresh.h"
+#import "SVProgressHUD.h"
+#import "MyControl.h"
 @interface BaseViewController : UIViewController
 
 @property (nonatomic,strong) LocationModel * locationModel;

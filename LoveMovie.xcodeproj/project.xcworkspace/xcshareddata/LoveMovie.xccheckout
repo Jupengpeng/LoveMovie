@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>79C62D63-C9B5-4ED4-B9DE-D82FBDA0E823</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>LoveMovie</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>DB7C4659EBF1E8759D215E5535783556E595F109</key>
 		<string>https://github.com/Jupengpeng/LoveMovie.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>LoveMovie.xcodeproj/project.xcworkspace</string>
+	<string>LoveMovie.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>DB7C4659EBF1E8759D215E5535783556E595F109</key>

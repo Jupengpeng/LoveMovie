@@ -78,7 +78,9 @@
 
 - (void)initData
 {
-    NSArray * dayArr = @[@"今天",@"明天",@"后天",@"大后天"];
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
+    
     NSString * url  = [NSString stringWithFormat:kHotTimeCinemaDetail,self.cinemaId,self.movieId];
     [_manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (responseObject) {
@@ -86,8 +88,10 @@
             NSArray * arr = [NSArray arrayWithArray:dict[@"showDates"]];
             
             for (int i = 0; i < arr.count; i ++ )  {
-                //添加改变形式后的日期字符串
-                [self.timeArr addObject:[NSString stringWithFormat:@"%@(%@)",dayArr[i], [self secondTransformTimeWithStr:arr[i] ] ] ];
+
+    
+                [self.timeArr addObject:[NSString stringWithFormat:@"%@", [self secondTransformTimeWithStr:arr[i] ] ] ];
+                
             }
             NSArray * showtArr= [NSArray arrayWithArray: dict[@"dateShowtimes"]];
             for (NSDictionary * showDict in showtArr) {
@@ -173,6 +177,7 @@
     }
     [self.dataArr addObjectsFromArray:self.playArr[0]];
     [self.tableView reloadData];
+    [SVProgressHUD dismiss];
 }
 
 #pragma mark - <UITableViewDataSource,UITableViewDelegate>

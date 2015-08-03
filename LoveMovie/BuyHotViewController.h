@@ -24,5 +24,7 @@
 
 @property (nonatomic) CLLocationCoordinate2D myCoordinate;
 
+@property (nonatomic)BOOL isRefreshing;
+@property (nonatomic)BOOL isLoadMore;
 
 @end

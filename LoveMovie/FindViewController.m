@@ -10,6 +10,8 @@
 #import "FindViewController.h"
 #define kHomeHotType1CellId @"HomeHotType1Cell"
 #define kHomeHotType2CellId @"HomeHotType2Cell"
+#define kListCellId @"cellId"
+#define kReviewCellId @"MyReviewCell"
 @interface FindViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     AFHTTPRequestOperationManager * _manager;
@@ -34,23 +36,29 @@
     if (self.dataArr== nil) {
         self.dataArr = [[NSMutableArray alloc]init];
     }
+    _currentPage =1;
     [self initUI];
-
+//    [self createHeaderRefreshView];;
     [self initHeaderData];
     [self firstDownload];
 }
 
 - (void)firstDownload{
+
+    
+
+    
+    _currentPage=1;
     //判断类型处理第一次下载数据
     if ([self.type isEqualToString:kNewType]) {
-        NSString * url = [NSString stringWithFormat:kFindNewsUrl,1];
+        NSString * url = [NSString stringWithFormat:kFindNewsUrl,_currentPage];
         [self downLoadDataWitUrl:url];
         
     }else if ([self.type isEqualToString:kForeType]){
         [self downLoadDataWitUrl:kForeDisplayUrl];
     
     }else if ([self.type isEqualToString:kSortType]){
-        NSString * url = [NSString stringWithFormat:kSortBoardUrl,1];
+        NSString * url = [NSString stringWithFormat:kSortBoardUrl,_currentPage];
         [self downLoadDataWitUrl:url];
 
     }else{
@@ -62,18 +70,24 @@
 }
 
 - (void)downLoadDataWitUrl:(NSString *)url{
+    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
     
+    __weak typeof(self) weakSelf =self;
     [_manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (weakSelf.dataArr&&weakSelf.isRefreshing) {
+            [weakSelf.dataArr removeAllObjects];
+        }
         if (responseObject) {
             //判断类型下载任务
-            if ([self.type isEqualToString:kNewType]) {
+            if ([weakSelf.type isEqualToString:kNewType]) {
                 
                 NSDictionary *dict=  [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
                 NSArray * newsListArr = [NSArray arrayWithArray:dict[@"newsList"]];
                 for (NSDictionary * dict in newsListArr) {
                     NewsListModel * model = [[NewsListModel alloc]init];;
                     [model setValuesForKeysWithDictionary:dict];
-                    [self.dataArr addObject:model];
+                    [weakSelf.dataArr addObject:model];
                 }
             }else if ([self.type isEqualToString:kForeType]){
                 
@@ -82,36 +96,36 @@
                 for (NSDictionary * dict in trailers) {
                     ForeDisPlayModel * model = [[ForeDisPlayModel alloc]init];
                     [model setValuesForKeysWithDictionary:dict];
-                    [self.dataArr addObject:model];
+                    [weakSelf.dataArr addObject:model];
                 }
-            }else if ([self.type isEqualToString:kSortType]){
+            }else if ([weakSelf.type isEqualToString:kSortType]){
                 
                 NSDictionary *dict=  [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
                 NSArray * topLosts = [NSArray arrayWithArray:dict[@"topLists"]];
                 for (NSDictionary * dict in topLosts) {
                     SortBoardModel * model = [[SortBoardModel alloc]init];
                     [model setValuesForKeysWithDictionary:dict];
-                    [self.dataArr addObject:model];
+                    [weakSelf.dataArr addObject:model];
                 }
                 
             }else{
                 
                 NSArray * array=  [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
                 for (NSDictionary * dict in array) {
-                    ReviewHeaderModel * model =  [[ReviewHeaderModel alloc]init];
+                    ReviewModel * model =  [[ReviewModel alloc]init];
                     [model setValuesForKeysWithDictionary:dict];
-                    [self.dataArr addObject:model];
+                    [weakSelf.dataArr addObject:model];
                 }
             
             }
             
         }
-        [self.tableView reloadData];
+        [SVProgressHUD dismiss];
+        [weakSelf endRefreshing];
+        [weakSelf.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         BBLog(@"下载失败");
     }];
-    
-    
     
     
 }
@@ -155,7 +169,9 @@
     
     [self.tableView registerNib:[UINib nibWithNibName:kHomeHotType1CellId bundle:nil] forCellReuseIdentifier:kHomeHotType1CellId];
     [self.tableView registerNib:[UINib nibWithNibName:@"HomeHotType2Cell" bundle:nil] forCellReuseIdentifier:kHomeHotType2CellId];
-    
+    [self.tableView registerNib:[UINib nibWithNibName:@"ReviewCell" bundle:nil] forCellReuseIdentifier:kReviewCellId];
+
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kListCellId];
     
 }
 //跳转到排行榜界面
@@ -180,7 +196,6 @@
             
             [self showHeaderView];
         }
-        [self.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         BBLog(@"下载失败");
     }];
@@ -207,6 +222,68 @@
     
 }
 
+//创建下拉刷新和上拉加载
+-(void)createHeaderRefreshView{
+    
+    __weak typeof (self) weakSelf = self;//弱引用
+    
+    [self.tableView addRefreshHeaderViewWithAniViewClass:[JHRefreshCommonAniView class] beginRefresh:^{
+        if (weakSelf.isRefreshing) {
+            return ;
+        }
+        //重新下载数据
+        
+        weakSelf.isRefreshing = YES;//标记正在刷新
+
+        
+        [weakSelf firstDownload];
+        
+
+        
+    }];
+}
+
+- (void)createFooterRefresh{
+    __weak typeof (self) weakSelf = self;//弱引用
+
+
+    [self.tableView addRefreshFooterViewWithAniViewClass:[JHRefreshCommonAniView class] beginRefresh:^{
+        if (weakSelf.isLoadMore) {
+            return ;
+        }
+        weakSelf.isLoadMore = YES;
+        
+       weakSelf.currentPage ++;
+        //判断类型处理下载数据
+        if ([weakSelf.type isEqualToString:kNewType]) {
+            NSString * url = [NSString stringWithFormat:kFindNewsUrl,weakSelf.currentPage];
+            [weakSelf downLoadDataWitUrl:url];
+            
+        }else if ([weakSelf.type isEqualToString:kSortType]){
+            NSString * url = [NSString stringWithFormat:kSortBoardUrl,weakSelf.currentPage];
+            [weakSelf downLoadDataWitUrl:url];
+            
+        }
+
+        
+    }];
+    
+    
+}
+//结束刷新
+- (void)endRefreshing {
+    if (self.isRefreshing) {
+        self.isRefreshing = NO;//标记刷新结束
+        //正在刷新 就结束刷新
+        [self.tableView headerEndRefreshingWithResult:JHRefreshResultNone];
+    }
+    if (self.isLoadMore) {
+        self.isLoadMore = NO;
+        [self.tableView footerEndRefreshing];
+    }
+}
+
+
 #pragma mark - <UITableViewDataSource,UITableViewDelegate>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.dataArr.count;
@@ -228,15 +305,20 @@
         return 120;
     }else if ([self.type isEqualToString:kSortType]){
         
+
+        SortBoardModel * model = self.dataArr[indexPath.row];
+        CGFloat cellHeight = [LZXHelper textHeightFromTextString:model.topListNameCn width:kScreenSize.width-20 fontSize:16.0f];
         
+        
+        return cellHeight+30;
     }else{
         
+        return 150;
     }
-    return 160;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell * cell = [[UITableViewCell alloc]init];
+//    UITableViewCell * cell = [[UITableViewCell alloc]init];
     //判断类型处理第一次下载数据
     if ([self.type isEqualToString:kNewType])
     {
@@ -244,29 +326,70 @@
         if (model.type==0||model.type==2) {
             HomeHotType2Cell * cell = [tableView dequeueReusableCellWithIdentifier:kHomeHotType2CellId forIndexPath:indexPath];
             [cell showDataWithNewsListModel:model];
+            return cell;
+
             
-        }else{
+        } else {
             HomeHotType1Cell * cell  = [tableView dequeueReusableCellWithIdentifier:kHomeHotType1CellId forIndexPath:indexPath];
             [cell showDataWithNewsListModel:model];
-        }
-        return cell;
-    }else if ([self.type isEqualToString:kForeType]){
-        HomeHotType2Cell * cell = [tableView dequeueReusableCellWithIdentifier:kHomeHotType2CellId forIndexPath:indexPath];
-      ForeDisPlayModel * model = self.dataArr[indexPath.row];
-        [cell showDataWithForeDisPlayModel:model];
-        
-    }else if ([self.type isEqualToString:kSortType]){
+            return cell;
 
-        
-    }else{
-        
+            
+        }
+    } else if ([self.type isEqualToString:kForeType]){
+        HomeHotType2Cell * cell = [tableView dequeueReusableCellWithIdentifier:kHomeHotType2CellId forIndexPath:indexPath];
+        ForeDisPlayModel * model = self.dataArr[indexPath.row];
+        [cell showDataWithForeDisPlayModel:model];
+        return cell;
+
+    } else if ([self.type isEqualToString:kSortType]){
+        UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kListCellId forIndexPath:indexPath];
+        SortBoardModel * model = self.dataArr[indexPath.row];
+        cell.textLabel.font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:16];
+        cell.textLabel.numberOfLines = 0;
+        cell.textLabel.text = model.topListNameCn;
+        return cell;
+    } else {
+        ReviewCell * cell = [tableView dequeueReusableCellWithIdentifier:kReviewCellId forIndexPath:indexPath];
+        ReviewModel * model = self.dataArr[indexPath.row];
+        [cell showDataWithReviewModel:model];
+        return cell;
     }
     
-    return cell;
+    BBLog(@"无cell");
+    return nil;
     
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    //判断类型处理点击事件
+    if ([self.type isEqualToString:kNewType]) {
+        NewsDetailViewController * dVC = [[NewsDetailViewController alloc]init];
+        NewsListModel * model = self.dataArr[indexPath.row];
+        dVC.newsId = model.id;
+        [self.navigationController pushViewController:dVC animated:YES];
+        
+    }else if ([self.type isEqualToString:kForeType]){
+        ForeDisPlayModel * model = self.dataArr[indexPath.row];
+        ForedisplayDetailController * fVC = [[ForedisplayDetailController alloc]init];
+        fVC.mp4Url = model.url;
+        fVC.myTitle = model.movieName;
+        fVC.summary = model.summary;
+        [self.navigationController pushViewController:fVC animated:YES];
+    
+    }else if ([self.type isEqualToString:kSortType]){
+        SortBoardModel * model =self.dataArr[indexPath.row];
+        TopListdDetailViewController * tVC = [[TopListdDetailViewController alloc]init];
+        tVC.boradId = model.id;
+        [self.navigationController pushViewController:tVC animated:YES];
+    
+    }else{
+        ReviewModel * model = self.dataArr[indexPath.row];
+        ReviewDetailViewController * rVC = [[ReviewDetailViewController alloc]init];
+        rVC.reviewId = model.id;
+        [self.navigationController pushViewController:rVC animated:YES];
+    }
     
 }
 
