@@ -9,7 +9,9 @@
 #import "ForedisplayDetailController.h"
 #import "KrVideoPlayerController.h"
 @interface ForedisplayDetailController ()
-
+{
+    CGRect _frame;
+}
 @property (nonatomic, strong) KrVideoPlayerController  *videoController;
 
 
@@ -61,6 +63,7 @@
     sumarylabel.text = self.summary;
     [self.view addSubview:sumarylabel];
 
+    _frame = sumarylabel.frame;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -72,7 +75,7 @@
     if (!self.videoController) {
         CGFloat width = kScreenSize.width;
         CGFloat height =width*(9.0/16.0);
-        self.videoController = [[KrVideoPlayerController alloc] initWithFrame:CGRectMake(0, kScreenSize.height-height-50, width,height )];
+        self.videoController = [[KrVideoPlayerController alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_frame)+30, width,height )];
         __weak typeof(self)weakSelf = self;
         [self.videoController setDimissCompleteBlock:^{
             weakSelf.videoController = nil;

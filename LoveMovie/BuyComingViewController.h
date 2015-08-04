@@ -24,6 +24,7 @@
 
 @property (nonatomic) int  currentCityId;
 
+- (void)initData;
 
 
 @end

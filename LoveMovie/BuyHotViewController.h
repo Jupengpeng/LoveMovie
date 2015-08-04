@@ -26,5 +26,6 @@
 
 @property (nonatomic)BOOL isRefreshing;
 @property (nonatomic)BOOL isLoadMore;
+- (void)initData;
 
 @end

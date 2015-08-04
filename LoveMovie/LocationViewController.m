@@ -12,6 +12,9 @@
 {
     AFHTTPRequestOperationManager * _manager;
 }
+@property (nonatomic)     NSMutableArray * cityArr;
+;
+
 @end
 
 @implementation LocationViewController
@@ -27,9 +30,22 @@
     _manager = [AFHTTPRequestOperationManager manager];
     _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
+    self.cityArr = [[NSMutableArray alloc]init];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.tintColor = myRed;
     self.title = @"选择城市";
+    
+    NSArray * cityNameArr = @[@"上海",@"北京",@"深圳",@"重庆",@"广州",@"成都",@"东莞",@"杭州",@"武汉",@"天津",@"佛山",@"南京"];
+    NSArray * cityIdArr = @[@292,@290,@366,@291,@365,@880,@371,@974,@561,@293,@373,@628];
+    for (int i = 0; i < cityNameArr.count; i ++) {
+        LocationModel * model = [[LocationModel alloc]init];
+        model.name = cityNameArr[i];
+        model.cityId = [cityIdArr[i] intValue];
+        [self.cityArr addObject:model];
+    }
+
+    
     
 //设置返回button
     UIBarButtonItem * locationBtn = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:@selector(popParent)];
@@ -98,6 +114,8 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+
 - (void)setMyBlock:(MyLocationBlock)myBlock{
     if (_myBlock != myBlock) {
         _myBlock = [myBlock copy];
@@ -109,14 +127,31 @@
 #pragma mark - <UITableViewDataSource,UITableViewDelegate>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return 20;
+    return self.cityArr.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell * cell = [[UITableViewCell alloc]init];
+static NSString * cellId = @"cellId";
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (cell==nil) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+    }
+    LocationModel * model = self.cityArr[indexPath.row];
+    cell.textLabel.text = model.name;
     return cell;
     
 }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    LocationModel * model = self.cityArr[indexPath.row];
+    if (_myBlock) {
+        //将地址model传过去
+        _myBlock(model);
+    }
+    
+    
+    [self.navigationController popViewControllerAnimated:YES];}
+
 
 
 - (void)didReceiveMemoryWarning {

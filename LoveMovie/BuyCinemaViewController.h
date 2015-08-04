@@ -33,9 +33,8 @@
 
 @property (nonatomic)int currentCityId ;
 
-
-
-
 @property (nonatomic) CLLocationCoordinate2D myCoordinate;
+
+- (void)initData;
 
 @end

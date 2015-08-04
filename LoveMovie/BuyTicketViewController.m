@@ -27,8 +27,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor lightGrayColor];
-    _manager = [AFHTTPRequestOperationManager manager];
-    _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
     if (self.movieViewController==nil) {
         self.movieViewController = [[BuyMovieViewController alloc]init];
@@ -36,6 +34,11 @@
     if (self.cinemaViewController==nil) {
         self.cinemaViewController = [[BuyCinemaViewController alloc]init];
     }
+    
+    _manager = [AFHTTPRequestOperationManager manager];
+    _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+
     
     
     //左上角位置button
@@ -77,6 +80,8 @@
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             BBLog(@"位置数据下载失败");
+            [SVProgressHUD dismiss];
+            [SVProgressHUD showErrorWithStatus:@"下载失败，请检查网络"];
         }];
         
     }];
@@ -91,6 +96,14 @@
     [lvc setMyBlock:^(LocationModel *locationModel) {
         
         if (locationModel.name) {
+
+            //把子视图控制器置空重建
+            weakSelf.movieViewController=nil;
+            weakSelf.movieViewController = [[BuyMovieViewController alloc]init];
+            
+            weakSelf.cinemaViewController=nil;
+            weakSelf.cinemaViewController = [[BuyCinemaViewController alloc]init];
+            
             
             weakSelf.locationBtn.title = locationModel.name;
             //城市id的传递 持续向下传递
@@ -99,8 +112,9 @@
             weakSelf.cinemaViewController.currentCityId = locationModel.cityId;
             weakSelf.movieViewController.currentCityId = locationModel.cityId;
             
-        
+        //各个界面刷新
             [self initUI];
+            
         }else{
             weakSelf.locationBtn.title = weakSelf.locationBtn.title;
             weakSelf.currentCityId = weakSelf.currentCityId;
@@ -116,6 +130,8 @@
 
 
 - (void)initUI{
+
+    
     
     [self addChildViewController:self.movieViewController];
     [self.view addSubview:self.movieViewController.view];

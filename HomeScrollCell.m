@@ -14,7 +14,7 @@
 
     self.myScrollView  = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 5, kScreenSize.width, 88)];
 
-    self.myScrollView.pagingEnabled= NO;
+//    self.myScrollView.pagingEnabled= YES;
     [self addSubview:self.myScrollView];
 
 }

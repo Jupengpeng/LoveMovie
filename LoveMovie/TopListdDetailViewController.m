@@ -67,9 +67,16 @@
 -(void)detailDownloadWithUrlStr:(NSString *)url{
     [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeClear];
     [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
+    
     AFHTTPRequestOperationManager * manager=[AFHTTPRequestOperationManager manager];
     manager.responseSerializer=[AFHTTPResponseSerializer serializer];
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //去掉标志位字符串
+        if (self.isLoadMore&&self.dataArr) {
+            [self.dataArr removeObject:kMovieTag];
+            [self.dataArr removeObject:kPersonTag];
+        }
+        
         if (self.isRefreshing&&self.dataArr) {
             [self.dataArr removeAllObjects];
         }

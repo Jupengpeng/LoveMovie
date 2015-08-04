@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 #import "AFNetworking.h"
-
+#import "HotCityModel.h"
 
 typedef void (^MyLocationBlock) (LocationModel * locationModel);
 

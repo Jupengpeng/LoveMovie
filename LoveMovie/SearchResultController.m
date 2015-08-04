@@ -63,6 +63,8 @@
 
 - (void)firstDownload{
     self.currentPage =1;
+    self.keyWords = [self.keyWords stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
     NSString * url = [NSString stringWithFormat:kSearchResultUrl,3,self.keyWords,self.currentPage];
     [self downloadDataWithUrl:url];
 }

@@ -28,11 +28,15 @@
 
 @implementation HomePageSearchController
 
+
+
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.tabBarController.tabBar setHidden:YES];
-    
-}
+    if (_searchBar.text) {
+        _searchBar.text =@"";
+    }}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -182,12 +186,13 @@
 //点击search 按钮 调用
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     SearchResultController * searchVC =[[SearchResultController alloc]init];
+    //将搜索内容进行url编码
     searchVC.keyWords = searchBar.text;
     //跳转
   [self.navigationController pushViewController:searchVC animated:YES];
     
 }
-
+//搜索内容变化调用
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     [self dowloadRelativeDataWithSearchText:searchText];
 }
@@ -199,6 +204,7 @@
     if (self.dataArr) {
         [self.dataArr removeAllObjects];
     }
+    //将搜索内容进行url编码
     text = [text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString * url = [NSString stringWithFormat:kSearchUrl,text];
 [_manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {

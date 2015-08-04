@@ -15,5 +15,9 @@
 
 @property (nonatomic) CLLocationCoordinate2D myCoordinate;
 
+@property (nonatomic) BuyHotViewController * hotController ;
+
+@property (nonatomic,strong) BuyComingViewController * comingController;
+- (void)initSubControllers;
 
 @end

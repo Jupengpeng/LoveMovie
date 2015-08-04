@@ -128,10 +128,11 @@
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             BBLog(@"%@",[error description]);
+            [SVProgressHUD dismiss];
+            [SVProgressHUD showErrorWithStatus:@"下载失败，请检查网络"];
         }];
         
     }];
-    
 }
 
 - (void)locationClick:(UIBarButtonItem *)barButtonItem
@@ -220,7 +221,10 @@
         [weakSelf.tableView reloadData];
         [weakSelf endRefreshing];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"下载失败%@",error );
+        BBLog(@"下载失败%@",error );
+        [SVProgressHUD dismiss];
+        [SVProgressHUD showErrorWithStatus:@"下载失败，请检查网络"];
+
     }];
     
     
@@ -233,6 +237,8 @@
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         BBLog(@"下载失败%@",[error description]);
+        [SVProgressHUD dismiss];
+        [SVProgressHUD showErrorWithStatus:@"下载失败，请检查网络"];
     }];
     
     
@@ -258,6 +264,10 @@
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             BBLog(@"位置数据下载失败");
+            
+            [SVProgressHUD dismiss];
+            [SVProgressHUD showErrorWithStatus:@"下载失败，请检查网络"];
+            
         }];
         
     }];
@@ -280,11 +290,11 @@
         }
         case 1:
         {
-            return 0;
+            return 530;
         }
         case 2:
         {
-            return 0;
+            return 98;
         }
             //
         case 3:
@@ -354,17 +364,17 @@
             
             
         }
-//        case 1:{
-//            areaSecondCell * cell  = [tableView dequeueReusableCellWithIdentifier:kareaSecondCellId forIndexPath:indexPath];
-//            HomeAreaSecondModel * areaSecondModel = self.homePageModel.areaSecond;
-//            [cell showDataWithAreaSecondModel:areaSecondModel];
-//            return cell;
-//        }
-//        case 2:{
-//            HomeScrollCell *cell = [tableView dequeueReusableCellWithIdentifier:kHomeScrollCellId forIndexPath:indexPath];
-//            [cell showDataWithAdvModel:self.homePageModel];
-//            return cell;
-//        }
+        case 1:{
+            areaSecondCell * cell  = [tableView dequeueReusableCellWithIdentifier:kareaSecondCellId forIndexPath:indexPath];
+            HomeAreaSecondModel * areaSecondModel = self.homePageModel.areaSecond;
+            [cell showDataWithAreaSecondModel:areaSecondModel];
+            return cell;
+        }
+        case 2:{
+            HomeScrollCell *cell = [tableView dequeueReusableCellWithIdentifier:kHomeScrollCellId forIndexPath:indexPath];
+            [cell showDataWithAdvModel:self.homePageModel];
+            return cell;
+        }
         case 3:{
             HomeHotPointCell * cell = [tableView dequeueReusableCellWithIdentifier:kHotpointButtonCellId forIndexPath:indexPath];
             

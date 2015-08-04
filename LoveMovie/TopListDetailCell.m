@@ -11,6 +11,8 @@
 @implementation TopListDetailCell
 
 - (void)awakeFromNib {
+    self.posterImageView.clipsToBounds = YES;
+    [self.posterImageView setContentMode:UIViewContentModeScaleAspectFill];
     self.ratingLabel.adjustsFontSizeToFitWidth = YES;
     self.nameLabel.adjustsFontSizeToFitWidth=YES;
 }

@@ -118,7 +118,6 @@
                 [self.cinemasArr removeAllObjects];
             }
             [self initData];
-            [self.tableView reloadData];
         }
             break;
         case 202:
